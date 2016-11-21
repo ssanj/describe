@@ -15,21 +15,45 @@ import scala.reflect.runtime.universe._
     def print(): Unit = println(value)
   }
 
-  final case class ParamInfo(sm: Symbol) {
+  final case class ParamInfo(private val sm: Symbol) {
     lazy val paramName: String = s"${sm.name.decodedName.toString}"
 
     lazy val  paramType: Type = sm.typeSignature
   }
 
-  final case class MethodInfo(ms: MethodSymbol) {
+  final case class MethodInfo(private val ms: MethodSymbol) {
 
     lazy val paramLists: List[List[ParamInfo]] = ms.paramLists.map(_.map(ParamInfo))
 
     lazy val methodName: String = s"${ms.name.decodedName.toString}"
 
-    lazy val returnType: Type = ms.returnType
+    lazy val returnType: MemberInfo = MemberInfo(ms.returnType)
 
     lazy val isConstructor: Boolean = ms.isConstructor
+
+    lazy val isImplicit: Boolean = ms.isImplicit
+  }
+
+  final case class ClassInfo(private val cs: ClassSymbol) {
+    lazy val className: String = s"${cs.name.decodedName.toString}"
+
+    lazy val isImplicit = cs.isImplicit
+
+    lazy val isSealed = cs.isSealed
+
+    lazy val isTrait = cs.isTrait
+
+    lazy val isCaseClass = cs.isCaseClass
+
+    lazy val isDerivedValueClass = cs.isDerivedValueClass
+
+    lazy val isPrimitive = cs.isPrimitive
+
+    lazy val isNumeric = cs.isNumeric
+
+    lazy val isAliasType = cs.isAliasType
+
+    lazy val subclasses = cs.knownDirectSubclasses.collect { case c if c.isType => ClassInfo(c.asClass) }
   }
 
   object MethodInfo {
@@ -38,13 +62,30 @@ import scala.reflect.runtime.universe._
     }
   }
 
-  final case class MemberInfo(ttType: Type) {
+  final case class MemberInfo(private val ttType: Type) {
 
     lazy val methods = ttType.members.collect { case m: MethodSymbol => MethodInfo(m) }.toSeq
+
+    lazy val classes = ttType.members.collect { case cs: ClassSymbol => ClassInfo(cs) }.toSeq
+
+    lazy val asClass: Option[ClassInfo] = {
+      val ts = ttType.typeSymbol
+      if (ts == NoSymbol) None
+      else Option(ClassInfo(ts.asClass))
+    }
 
     def methodsByName(reg: String): Seq[MethodInfo] = methods.filter(_.methodName.matches(reg))
 
     lazy val constructors: Seq[MethodInfo] = methods.filter(_.isConstructor)
+
+    lazy val implicitMethods: Seq[MethodInfo] = methods.filter(_.isImplicit)
+
+    lazy val implicitClasses: Seq[ClassInfo] = classes.filter(_.isImplicit)
+
+    lazy val companion: Option[MemberInfo] = {
+      val comp = ttType.dealias.etaExpand.companion
+      if (comp == NoType) None else Option(MemberInfo(comp))
+    }
 
     lazy val superclasses: Seq[MemberInfo] = {
       ttType.baseClasses.collect {
