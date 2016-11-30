@@ -45,6 +45,12 @@ package object describe {
 
   def members[T: TypeTag] = api.members.info[T]
 
+  def vars[T: TypeTag]    = api.members.info[T].vars
+
+  def vals[T: TypeTag]    = api.members.info[T].vals
+
+  def classes[T: TypeTag]    = api.members.info[T].classes
+
   implicit def imSeqToFormat[T: Show](values: Seq[T]): Format[T] = new Format[T](values, implicitly[Show[T]])
 
   implicit def imStringToPrint(value: String): Print = new Print(value)

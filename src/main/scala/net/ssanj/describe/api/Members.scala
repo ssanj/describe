@@ -15,17 +15,18 @@ import scala.reflect.runtime.universe._
     def print(): Unit = println(value)
   }
 
-  final case class ParamInfo(private val sm: Symbol) {
-    lazy val paramName: String = s"${sm.name.decodedName.toString}"
+  final case class ParamInfo(private val sm: Symbol) extends SymbolAttr {
+
+    val symbol: Symbol = sm
 
     lazy val  paramType: Type = sm.typeSignature
   }
 
-  final case class MethodInfo(private val ms: MethodSymbol) {
+  final case class MethodInfo(private val ms: MethodSymbol) extends SymbolAttr  {
+
+    val symbol: Symbol = ms
 
     lazy val paramLists: List[List[ParamInfo]] = ms.paramLists.map(_.map(ParamInfo))
-
-    lazy val methodName: String = s"${ms.name.decodedName.toString}"
 
     lazy val returnType: MemberInfo = MemberInfo(ms.returnType)
 
@@ -34,8 +35,9 @@ import scala.reflect.runtime.universe._
     lazy val isImplicit: Boolean = ms.isImplicit
   }
 
-  final case class ClassInfo(private val cs: ClassSymbol) {
-    lazy val className: String = s"${cs.name.decodedName.toString}"
+  final case class ClassInfo(private val cs: ClassSymbol) extends SymbolAttr {
+
+    val symbol: Symbol = cs
 
     lazy val isImplicit = cs.isImplicit
 
@@ -56,22 +58,45 @@ import scala.reflect.runtime.universe._
     lazy val subclasses = cs.knownDirectSubclasses.collect { case c if c.isType => ClassInfo(c.asClass) }
   }
 
-  object MethodInfo {
-    implicit val imMethodInfoShow: Show[MethodInfo] = new Show[MethodInfo] {
-      def show(value: MethodInfo): String = value.methodName
+  final case class VarInfo(private val ts: TermSymbol) extends SymbolAttr  {
+    val symbol: Symbol = ts
+    lazy val `type` = MemberInfo(ts.typeSignature)
+  }
+
+  final case class ValInfo(private val ts: TermSymbol) extends SymbolAttr  {
+    val symbol: Symbol = ts
+    lazy val `type` = MemberInfo(ts.typeSignature)
+  }
+
+  final case class ModuleInfo(private val ms: ModuleSymbol) extends SymbolAttr {
+    val symbol = ms.asInstanceOf[Symbol]
+    lazy val moduleClass: Option[ClassInfo] = {
+      val cs = ms.companion
+      if (cs == NoSymbol || !cs.isClass) None
+      else Option(ClassInfo(cs.asClass))
     }
   }
 
   final case class MemberInfo(private val ttType: Type) {
 
-    lazy val methods = ttType.members.collect { case m: MethodSymbol => MethodInfo(m) }.toSeq
+    lazy val name = getName(ttType.typeSymbol)
 
-    lazy val classes = ttType.members.collect { case cs: ClassSymbol => ClassInfo(cs) }.toSeq
+    private lazy val members = ttType.members
+
+    lazy val methods = members.collect { case m: MethodSymbol => MethodInfo(m) }.toSeq
+
+    lazy val classes = members.collect { case cs: ClassSymbol => ClassInfo(cs) }.toSeq
+
+    lazy val vars = members.collect { case ts: TermSymbol if !ts.isMethod && ts.isVar => VarInfo(ts) }.toSeq
+
+    lazy val vals = members.collect { case ts: TermSymbol if !ts.isMethod && ts.isVal => ValInfo(ts) }.toSeq
+
+    lazy val modules = members.collect { case ms: ModuleSymbol => ModuleInfo(ms) }.toSeq
 
     lazy val asClass: Option[ClassInfo] = {
       val ts = ttType.typeSymbol
-      if (ts == NoSymbol) None
-      else Option(ClassInfo(ts.asClass))
+      if (ts == NoSymbol || !ts.isClass) None
+      else Option(ClassInfo(ts.asClass.asClass))
     }
 
     lazy val finalResultType = ttType.finalResultType
@@ -93,7 +118,7 @@ import scala.reflect.runtime.universe._
         result._1 && result._2
       })
 
-    def methodsByName(reg: String): Seq[MethodInfo] = methods.filter(_.methodName.matches(reg))
+    def methodsByName(reg: String): Seq[MethodInfo] = methods.filter(_.name.matches(reg))
 
     def methodsBy(f: MethodInfo => Boolean): Seq[MethodInfo] = methods.filter(f)
 
@@ -148,28 +173,4 @@ trait Members {
   def info[T: TypeTag]: MemberInfo = MemberInfo(typeOf[T])
 
   def info[T: TypeTag](value: T): MemberInfo = MemberInfo(typeOf[T])
-
-  // private def filterMembers[T: TypeTag, U <: Symbol](filter: PartialFunction[Symbol, U]): Seq[U] = {
-  //   members[T].collect(filter).toList.toSeq
-  // }
-
-  // def methods[T: TypeTag]: Seq[MethodSymbol] =
-  //   members[T].
-  //     collect{ case m: MethodSymbol => m }.
-  //     toList
-
-  // def types[T: TypeTag]: Seq[TypeSymbol] =
-  //   members[T].
-  //     collect{ case t: TypeSymbol => t }.
-  //     toList
-
-  // def modules[T: TypeTag]: Seq[ModuleSymbol] =
-  //   members[T].
-  //     collect{ case m: ModuleSymbol => m }.
-  //     toList
-
-  // def classes[T: TypeTag]: Seq[ClassSymbol] =
-  //     members[T].
-  //       collect{ case c: ClassSymbol => c }.
-  //       toList
 }
