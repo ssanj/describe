@@ -4,7 +4,10 @@ import scala.reflect.runtime.universe._
 
 final case class MemberInfo(private val ttType: Type) {
 
+  //This should always work as Type should always have TypeSymbols.
   lazy val name = getName(ttType.typeSymbol)
+
+  lazy val fullName = ttType.typeSymbol.fullName
 
   private lazy val members = ttType.members
 
@@ -19,9 +22,8 @@ final case class MemberInfo(private val ttType: Type) {
   lazy val modules = members.collect { case ms: ModuleSymbol => ModuleInfo(ms) }.toSeq
 
   lazy val asClass: Option[ClassInfo] = {
-    val ts = ttType.typeSymbol
-    if (ts == NoSymbol || !ts.isClass) None
-    else Option(ClassInfo(ts.asClass.asClass))
+    getTypeSymbol(ttType).
+      collect { case ts if ts.isClass => ClassInfo(ts.asClass) }
   }
 
   lazy val finalResultType = ttType.finalResultType
@@ -51,6 +53,22 @@ final case class MemberInfo(private val ttType: Type) {
 
   def methodsReturningTypeParams: Seq[MethodInfo] =
     methods.filter(_.returnType.finalResultType.typeSymbol.isParameter)
+
+  def methodsOfHigherOrder: Seq[MethodInfo] = methods.filter { m =>
+    val parameters = m.paramLists.flatten
+
+    def hasHOParam(p: ParamInfo): Boolean =
+      getTypeSymbol(p.paramType).
+        orElse(getTermSymbol(p.paramType)).
+          filter(_.fullName.startsWith("scala.Function")).isDefined
+
+    def hasHOReturnType(memberInfo: MemberInfo): Boolean = {
+      memberInfo.fullName.startsWith("scala.Function")
+    }
+
+    //check return type first as it will be faster.
+    hasHOReturnType(m.returnType) || parameters.exists(hasHOParam)
+  }
 
   lazy val constructors: Seq[MethodInfo] = methods.filter(_.isConstructor)
 

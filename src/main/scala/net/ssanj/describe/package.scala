@@ -49,7 +49,7 @@ package object describe {
 
   def vals[T: TypeTag]    = api.members.info[T].vals
 
-  def classes[T: TypeTag]    = api.members.info[T].classes
+  def classes[T: TypeTag] = api.members.info[T].classes
 
   implicit def imSeqToFormat[T: Show](values: Seq[T]): Format[T] = new Format[T](values, implicitly[Show[T]])
 
