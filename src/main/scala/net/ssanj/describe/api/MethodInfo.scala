@@ -2,17 +2,18 @@ package net.ssanj.describe.api
 
 import scala.reflect.runtime.universe._
 
-final case class MethodInfo(private val ms: MethodSymbol) extends SymbolAttr  {
-
-  val symbol: Symbol = ms
+final case class MethodInfo(private val ms: MethodSymbol) {
 
   lazy val paramLists: List[List[ParamInfo]] = ms.paramLists.map(_.map(ParamInfo))
+}
 
-  lazy val returnType: MemberInfo = MemberInfo(ms.returnType)
+object MethodInfo {
 
-  lazy val isConstructor: Boolean = ms.isConstructor
+  implicit def toSymbolOpsForMethodInfo(methodInfo: MethodInfo) = toSymbolOps(methodInfo.ms)
 
-  lazy val isImplicit: Boolean = ms.isImplicit
+  implicit def toTermOpsForMethodInfo(methodInfo: MethodInfo) = toTermOps(methodInfo.ms)
+
+  implicit def toMethodOpsForMethodInfo(methodInfo: MethodInfo) = toMethodOps(methodInfo.ms)
 }
 
 final case class ParamInfo(private val sm: Symbol) extends SymbolAttr {

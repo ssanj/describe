@@ -2,7 +2,6 @@ package net.ssanj.describe.api
 
 import scala.reflect.runtime.universe._
 
-
 final case class MemberInfo(private val ttType: Type) {
 
   lazy val name = getName(ttType.typeSymbol)

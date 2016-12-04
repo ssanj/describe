@@ -9,6 +9,23 @@ baseType       decls          isInstanceOf      paramss             typeArgs
 companion      erasure        map               resultType          typeConstructor
 contains       etaExpand      member            substituteSymbols   typeParams
 
+at the symbol level (Symbol)
+
+NameType               fullName                   isModule          isType
+allOverriddenSymbols   info                       isModuleClass     map
+alternatives           infoIn                     isPackage         name
+annotations            isAbstract                 isPackageClass    orElse
+asClass                isAbstractOverride         isParameter       overrides
+asInstanceOf           isClass                    isPrivate         owner
+asMethod               isConstructor              isPrivateThis     pos
+asModule               isFinal                    isProtected       privateWithin
+asTerm                 isImplementationArtifact   isProtectedThis   suchThat
+asType                 isImplicit                 isPublic          toString
+associatedFile         isInstanceOf               isSpecialized     typeSignature
+companion              isJava                     isStatic          typeSignatureIn
+companionSymbol        isMacro                    isSynthetic
+filter                 isMethod                   isTerm
+
 at the term level (TermSymbol)
 
 NameType               infoIn                     isModuleClass        isType
