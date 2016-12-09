@@ -9,11 +9,11 @@ final case class MethodInfo(private val ms: MethodSymbol) {
 
 object MethodInfo {
 
-  implicit def toSymbolOpsForMethodInfo(methodInfo: MethodInfo) = toSymbolOps(methodInfo.ms)
+  implicit def toSymbolOpsFromMethodInfo(methodInfo: MethodInfo) = toSymbolOps(methodInfo.ms)
 
-  implicit def toTermOpsForMethodInfo(methodInfo: MethodInfo) = toTermOps(methodInfo.ms)
+  implicit def toTermOpsFromMethodInfo(methodInfo: MethodInfo) = toTermOps(methodInfo.ms)
 
-  implicit def toMethodOpsForMethodInfo(methodInfo: MethodInfo) = toMethodOps(methodInfo.ms)
+  implicit def toMethodOpsFromMethodInfo(methodInfo: MethodInfo) = toMethodOps(methodInfo.ms)
 }
 
 final case class ParamInfo(private val sm: Symbol) extends SymbolAttr {

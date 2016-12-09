@@ -1,17 +1,30 @@
 package net.ssanj.describe.api
 
 import scala.reflect.runtime.universe.MethodSymbol
+import scala.reflect.runtime.universe.InstanceMirror
+import scala.reflect.runtime.universe.definitions.BooleanTpe
 
 trait ToMethodOps {
 
   private[api] def toMethodOps(methodSymbol: MethodSymbol) = new MethodOps {
 
-    def isPrimaryConstructor: Boolean = methodSymbol.isPrimaryConstructor
+    lazy val isPrimaryConstructor: Boolean = methodSymbol.isPrimaryConstructor
 
-    def isVarargs: Boolean = methodSymbol.isVarargs
+    lazy val isVarargs: Boolean = methodSymbol.isVarargs
 
-    def returnType: MemberInfo = MemberInfo(methodSymbol.returnType)
+    lazy val returnType: MemberInfo = MemberInfo(methodSymbol.returnType)
 
-    def isMethod: Boolean = methodSymbol.isMethod
+    lazy val isMethod: Boolean = methodSymbol.isMethod
+
+    lazy val isParameterless: Boolean = methodSymbol.paramLists.isEmpty
+
+    lazy val hasTypeParams: Boolean = methodSymbol.typeParams.nonEmpty
+
+    lazy val isFlag: Boolean =
+      isParameterless &&
+      !hasTypeParams && /* filters out methods like isInstanceOf[T] => Boolean */
+      returnType.resultType =:= BooleanTpe
+
+    def invoke[T](mirror: InstanceMirror): T = (mirror.reflectMethod(methodSymbol).apply()).asInstanceOf[T]
   }
 }

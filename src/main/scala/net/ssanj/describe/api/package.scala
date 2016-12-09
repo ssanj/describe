@@ -19,5 +19,7 @@ package object api extends ToSymbolOps
   private[api] def getTermSymbol(t: Type): Option[TermSymbol] = Try {
     t.termSymbol.asTerm
   }.toOption.filterNot(_ == NoSymbol)
+
+  private[api] val rm = runtimeMirror(getClass.getClassLoader)
 }
 

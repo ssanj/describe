@@ -1,5 +1,6 @@
 package net.ssanj.describe.api
 
+import scala.reflect.ClassTag
 import scala.reflect.runtime.universe._
 
 final case class MemberInfo(private val ttType: Type) {
@@ -107,6 +108,12 @@ final case class MemberInfo(private val ttType: Type) {
           case sc if sc.isClass => MemberInfo(sc.asClass.toType)
         }.toSeq
       }else Seq.empty[MemberInfo]
+  }
+
+  def flags[T: ClassTag](value: T): Seq[(String, Boolean)] = {
+    val im = rm.reflect(value)
+    val trueFirst = implicitly[math.Ordering[Boolean]].reverse
+    methodsBy(_.isFlag).map(m => m.name -> m.invoke[Boolean](im)).toSeq.sortBy(_._2)(trueFirst)
   }
 }
 

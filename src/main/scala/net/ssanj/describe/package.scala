@@ -43,7 +43,11 @@ package object describe {
 
   def methods[T: TypeTag] = api.members.info[T].methods
 
+  def methods[T: TypeTag](value: T) = api.members.info[T](value).methods
+
   def members[T: TypeTag] = api.members.info[T]
+
+  def members[T: TypeTag](value: T) = api.members.info[T](value)
 
   def vars[T: TypeTag]    = api.members.info[T].vars
 
