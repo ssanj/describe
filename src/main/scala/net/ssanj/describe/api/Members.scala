@@ -110,10 +110,15 @@ final case class MemberInfo(private val ttType: Type) {
       }else Seq.empty[MemberInfo]
   }
 
-  def flags[T: ClassTag](value: T): Seq[(String, Boolean)] = {
+  lazy val flags: Seq[MethodInfo] = methodsBy(_.isFlag)
+
+  def flagValues[T: ClassTag](value: T): Seq[(MethodInfo, Boolean)] = {
     val im = rm.reflect(value)
     val trueFirst = implicitly[math.Ordering[Boolean]].reverse
-    methodsBy(_.isFlag).map(m => m.name -> m.invoke[Boolean](im)).toSeq.sortBy(_._2)(trueFirst)
+    flags.
+      map(m => m -> m.invoke[Boolean](im)).
+      collect{ case (m, Some(result)) => m -> result }.
+      sortBy(_._2)(trueFirst)
   }
 }
 
