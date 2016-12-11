@@ -5,7 +5,8 @@ import scala.util.Try
 
 package object api extends ToSymbolOps
                    with    ToTermOps
-                   with    ToMethodOps {
+                   with    ToMethodOps
+                   with    ToMemberOps {
 
   object members extends api.Members
 

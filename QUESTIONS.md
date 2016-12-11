@@ -1,11 +1,12 @@
 How do we represent a symbol?
- One of four types?
- - ValInfo
- - VarInfo
- - MethodInfo
- - ClassInfo
- - TypeInfo (subsumed by ClassInfo?)
- - ParamInfo (??)
+ One of x types?
+ - ValInfo (TermSymbol)
+ - VarInfo (TermSymbol)
+ - MethodInfo (MethodSymbol)
+ - ClassInfo (ClassSymbol)
+ - TypeInfo (Type) (ParamInfo is subsumed into this)
+ - AbstractTypeInfo (TypeSymbol)
+ - ModuleInfo (ModuleSymbol)
 
 How do we represent a Type?
 - MemberInfo. Possibly rename to TypeInfo
@@ -17,7 +18,13 @@ How do we convert from a symbol to a Type?
 symbol.asType.toType
 symbol.typeSignature (for parameters)
 
+How do we convert from a Type to a symbol?
+type.typeSymbol or
+type.termSymbol
+
 What is a safe way to convert from Type to a TypeSymbol and TermSymbol.
 Option[TypeInfo] (ClassInfo, Module Info), Option[TermInfo] (ValInfo, VarInfo, MethodInfo)
+
+Should we only list public entities?
 
 

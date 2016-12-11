@@ -1,16 +1,11 @@
 package net.ssanj.describe.api
 
-import scala.reflect.ClassTag
 import scala.reflect.runtime.universe._
+import scala.reflect.ClassTag
 
-final case class MemberInfo(private val ttType: Type) {
+trait MemberOps {
 
-  //This should always work as Type should always have TypeSymbols.
-  lazy val name = getName(ttType.typeSymbol)
-
-  lazy val fullName = ttType.typeSymbol.fullName
-
-  private lazy val members = ttType.members
+  val members: MemberScope
 
   lazy val methods = members.collect { case m: MethodSymbol => MethodInfo(m) }.toSeq
 
@@ -22,14 +17,11 @@ final case class MemberInfo(private val ttType: Type) {
 
   lazy val modules = members.collect { case ms: ModuleSymbol => ModuleInfo(ms) }.toSeq
 
-  lazy val asClass: Option[ClassInfo] = {
-    getTypeSymbol(ttType).
-      collect { case ts if ts.isClass => ClassInfo(ts.asClass) }
-  }
+  val asClass: Option[ClassInfo]
 
-  lazy val finalResultType = ttType.finalResultType
+  val finalResultType: Type
 
-  lazy val resultType = ttType.resultType
+  val resultType: Type
 
   def methodsByParam[T: TypeTag]: Seq[MethodInfo] =
     methods.filter(_.paramLists.exists(_.exists(_.paramType =:= typeOf[T])))
@@ -87,28 +79,11 @@ final case class MemberInfo(private val ttType: Type) {
     companion.toSeq.flatMap(_.implicitClasses)
   }
 
-  lazy val companion: Option[MemberInfo] = {
-    val comp = ttType.dealias.etaExpand.companion
-    if (comp == NoType) None else Option(MemberInfo(comp))
-  }
+  val companion: Option[MemberInfo]
 
-  lazy val superclasses: Seq[MemberInfo] = {
-    ttType.baseClasses.collect {
-      case bc if bc.isClass => MemberInfo(bc.asClass.toType)
-    }
-  }
+  val superclasses: Seq[MemberInfo]
 
-  lazy val subclasses: Seq[MemberInfo] = {
-      val typeSymbol = ttType.typeSymbol
-      if (typeSymbol.isClass) {
-        typeSymbol.
-        asClass.
-        knownDirectSubclasses.
-        collect {
-          case sc if sc.isClass => MemberInfo(sc.asClass.toType)
-        }.toSeq
-      }else Seq.empty[MemberInfo]
-  }
+  val subclasses: Seq[MemberInfo]
 
   lazy val flags: Seq[MethodInfo] = methodsBy(_.isFlag)
 
@@ -120,12 +95,4 @@ final case class MemberInfo(private val ttType: Type) {
       collect{ case (m, Some(result)) => m -> result }.
       sortBy(_._2)(trueFirst)
   }
-}
-
-
-trait Members {
-
-  def info[T: TypeTag]: MemberInfo = MemberInfo(typeOf[T])
-
-  def info[T: TypeTag](value: T): MemberInfo = MemberInfo(typeOf[T])
 }
