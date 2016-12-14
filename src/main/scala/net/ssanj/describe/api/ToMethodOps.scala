@@ -3,7 +3,7 @@ package net.ssanj.describe.api
 import scala.reflect.runtime.universe.MethodSymbol
 import scala.reflect.runtime.universe.InstanceMirror
 import scala.reflect.runtime.universe.definitions.BooleanTpe
-import scala.reflect.ClassTag
+import scala.util.Try
 
 trait ToMethodOps {
 
@@ -26,10 +26,9 @@ trait ToMethodOps {
       !hasTypeParams && /* filters out methods like isInstanceOf[T] => Boolean */
       returnType.resultType =:= BooleanTpe
 
-    def invoke[T: ClassTag](mirror: InstanceMirror): Option[T] = {
+    def invoke[T](mirror: InstanceMirror): Option[T] = {
       val result = mirror.reflectMethod(methodSymbol).apply()
-      val rtClass = implicitly[ClassTag[T]].runtimeClass
-      if (rtClass.isInstance(result)) Option(result.asInstanceOf[T]) else None
+      Try(result.asInstanceOf[T]).toOption
     }
   }
 }

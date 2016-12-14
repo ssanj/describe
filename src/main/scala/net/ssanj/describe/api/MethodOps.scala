@@ -1,7 +1,6 @@
 package net.ssanj.describe.api
 
 import scala.reflect.runtime.universe.InstanceMirror
-import scala.reflect.ClassTag
 
 trait MethodOps {
   // val exceptions: List[Universe.Symbol]
@@ -19,5 +18,5 @@ trait MethodOps {
 
   val hasTypeParams: Boolean
 
-  def invoke[T: ClassTag](mirror: InstanceMirror): Option[T]
+  def invoke[T](mirror: InstanceMirror): Option[T]
 }
