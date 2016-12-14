@@ -32,5 +32,7 @@ scalacOptions in (Compile, console) ~= (_ filterNot (Seq("-Ywarn-unused-import",
 
 scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
 
+scalacOptions in (Compile,doc) ++= Seq("-no-link-warnings")
+
 initialCommands := "import net.ssanj.describe._"
 

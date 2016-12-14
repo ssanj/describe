@@ -55,6 +55,12 @@ package object describe {
 
   def classes[T: TypeTag] = api.members.info[T].classes
 
+  //access to the reflection universe
+  lazy val ru = scala.reflect.runtime.universe
+
+  //access to the current mirror
+  lazy val cm = scala.reflect.runtime.currentMirror
+
   implicit def imSeqToFormat[T: Show](values: Seq[T]): Format[T] = new Format[T](values, implicitly[Show[T]])
 
   implicit def imStringToPrint(value: String): Print = new Print(value)
