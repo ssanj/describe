@@ -17,7 +17,7 @@ trait ToMethodOps {
 
     lazy val isMethod: Boolean = methodSymbol.isMethod
 
-    lazy val isParameterless: Boolean = methodSymbol.paramLists.isEmpty
+    lazy val isParameterless: Boolean = methodSymbol.paramLists.flatten.isEmpty
 
     lazy val hasTypeParams: Boolean = methodSymbol.typeParams.nonEmpty
 

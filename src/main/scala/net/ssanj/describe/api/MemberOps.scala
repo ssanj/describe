@@ -95,4 +95,6 @@ trait MemberOps {
       collect{ case (m, Some(result)) => m -> result }.
       sortBy(_._2)(trueFirst)
   }
+
+  val symbolFlagValues: Seq[(MethodInfo, Boolean)]
 }

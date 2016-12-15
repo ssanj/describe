@@ -39,5 +39,18 @@ trait ToMemberOps {
         }.toSeq
       }else Seq.empty[MemberInfo]
     }
+
+    lazy val symbolFlagValues: Seq[(MethodInfo, Boolean)] = {
+      import scala.reflect.runtime.{universe => u}
+      import u._
+      val typeSymbol = tpe.typeSymbol.asType
+      if (typeSymbol.isClass) {
+         val mi = MemberInfo(u.typeOf[u.ClassSymbol])
+         mi.flagValues(typeSymbol.asClass)
+      } else {
+        val mi = MemberInfo(u.typeOf[u.TypeSymbol])
+        mi.flagValues(typeSymbol)
+      }
+    }
   }
 }
