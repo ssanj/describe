@@ -18,7 +18,7 @@ trait ToMemberOps {
     lazy val resultType = tpe.resultType
 
     lazy val companion: Option[MemberInfo] = {
-      val comp = tpe.dealias.etaExpand.companion
+      val comp = tpe.erasure.companion
       if (comp == NoType) None else Option(MemberInfo(comp))
     }
 

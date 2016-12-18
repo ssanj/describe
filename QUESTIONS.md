@@ -17,6 +17,7 @@ What's the difference between a ClassSymbol and a Type?
 How do we convert from a symbol to a Type?
 symbol.asType.toType
 symbol.typeSignature (for parameters)
+symbol.info
 
 How do we convert from a Type to a symbol?
 type.typeSymbol or

@@ -5,6 +5,8 @@ import scala.reflect.runtime.universe._
 final case class MethodInfo(private val ms: MethodSymbol) {
 
   lazy val paramLists: List[List[ParamInfo]] = ms.paramLists.map(_.map(ParamInfo))
+
+  lazy val symbol = ms
 }
 
 object MethodInfo {
