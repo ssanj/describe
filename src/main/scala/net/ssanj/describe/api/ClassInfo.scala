@@ -22,5 +22,9 @@ final case class ClassInfo(private val cs: ClassSymbol) extends SymbolAttr {
 
   lazy val isAliasType = cs.isAliasType
 
+  lazy val asType = MemberInfo(symbol.asType.toType)
+
+  lazy val asReflectType = symbol.asType.toType
+
   lazy val subclasses = cs.knownDirectSubclasses.collect { case c if c.isType => ClassInfo(c.asClass) }
 }

@@ -97,4 +97,6 @@ trait MemberOps {
   }
 
   val symbolFlagValues: Seq[(MethodInfo, Boolean)]
+
+  val implicitConversionTypes: Seq[MemberInfo]
 }

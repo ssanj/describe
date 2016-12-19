@@ -64,5 +64,7 @@ package object describe {
   implicit def imSeqToFormat[T: Show](values: Seq[T]): Format[T] = new Format[T](values, implicitly[Show[T]])
 
   implicit def imStringToPrint(value: String): Print = new Print(value)
+
+  implicit def describeToReflectType(t: ru.Type): scala.reflect.runtime.universe.Type = t.asInstanceOf[scala.reflect.runtime.universe.Type]
 }
 

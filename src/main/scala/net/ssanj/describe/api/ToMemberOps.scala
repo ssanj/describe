@@ -52,5 +52,26 @@ trait ToMemberOps {
         mi.flagValues(typeSymbol)
       }
     }
+
+    lazy val implicitConversionTypes: Seq[MemberInfo] = {
+
+      def getType(): Type = {
+        if (MemberInfo(tpe).isModuleClass) {
+          companion.map(_.resultType.erasure).getOrElse(tpe.erasure)
+        } else tpe.erasure
+      }
+
+      val imethods =
+        allImplicitMethods.filter { m =>
+          val params = m.paramLists.flatten
+          params.length == 1 &&
+          params.head.paramType.erasure =:= getType() &&
+          !(m.returnType.resultType.erasure =:= getType())
+        } map (_.returnType)
+
+      val iclasses = allImplicitClasses map (_.asType)
+
+      imethods ++ iclasses
+    }
   }
 }

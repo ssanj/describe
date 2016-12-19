@@ -32,6 +32,26 @@ final class MemberInfoSpec extends Matchers with WordSpecLike with AppendedClues
     }
   }
 
+  it should {
+    "find implicit conversion types" when {
+
+      def assertOptionImplicitConversionTypes(mi: MemberInfo): Unit = {
+        val ict = mi.implicitConversionTypes
+        ict should have size 1
+        ict.head.resultType.erasure =:= u.typeOf[Iterable[_]].erasure
+
+      }
+
+      "when called from a class" in {
+        assertOptionImplicitConversionTypes(MemberInfo(u.typeOf[Option[_]]))
+      }
+
+      "when called from an object" in {
+        assertOptionImplicitConversionTypes(MemberInfo(u.typeOf[Option.type]))
+      }
+    }
+  }
+
   private def assertCompanion(sourceT: u.Type, companionT: u.Type, methodName: String): Unit = {
     val mi   = MemberInfo(sourceT)
     val comp = mi.companion
