@@ -5,10 +5,10 @@ import scala.reflect.runtime.universe._
 final case class MemberInfo(private val ttType: Type)
 
 object MemberInfo {
-  implicit def toMemberOpsFromType(mi: MemberInfo): MemberOps = toMemberOps(mi.ttType)
+  implicit def toMemberOpsFromMemberInfo(mi: MemberInfo): MemberOps = toMemberOps(mi.ttType)
 
   //Going to a TypeSymbol from a Type should always be safe.
-  implicit def toSymbolOpsFromType(mi: MemberInfo): SymbolOps = toSymbolOps(mi.ttType.typeSymbol)
+  implicit def toSymbolOpsFromMemberInfo(mi: MemberInfo): SymbolOps = toSymbolOps(mi.ttType.typeSymbol)
 }
 
 

@@ -61,6 +61,14 @@ package object describe {
   //access to the current mirror
   lazy val cm = scala.reflect.runtime.currentMirror
 
+  lazy val anyMethods = methods[Any]
+
+  lazy val anyRefMethods = methods[AnyRef]
+
+  lazy val productMethods = methods[Product]
+
+  lazy val serializableMethods = methods[Serializable] ++ methods[java.io.Serializable]
+
   implicit def imSeqToFormat[T: Show](values: Seq[T]): Format[T] = new Format[T](values, implicitly[Show[T]])
 
   implicit def imStringToPrint(value: String): Print = new Print(value)
