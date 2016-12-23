@@ -26,6 +26,12 @@ type.termSymbol
 What is a safe way to convert from Type to a TypeSymbol and TermSymbol.
 Option[TypeInfo] (ClassInfo, Module Info), Option[TermInfo] (ValInfo, VarInfo, MethodInfo)
 
+Do we need to override equals and hashCode to allow for proper comparisons? Eg. contains?
+
 Should we only list public entities?
 
+How does the "normal" equals matching working with Symbol? Does it change if we have different owners?
 
+How to handle typeclasses in a context? Show for fullMethodNames, Show for name, show for Method definitions? Add context as a type param?
+
+Show[Context, T]

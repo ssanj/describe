@@ -8,6 +8,8 @@ trait ToMemberOps {
 
     lazy val members = tpe.members
 
+    lazy val decls = tpe.decls
+
     lazy val asClass: Option[ClassInfo] = {
       getTypeSymbol(tpe).
         collect { case ts if ts.isClass => ClassInfo(ts.asClass) }

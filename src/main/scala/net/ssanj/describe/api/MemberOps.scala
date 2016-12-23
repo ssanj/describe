@@ -7,7 +7,11 @@ trait MemberOps {
 
   val members: MemberScope
 
+  val decls: MemberScope
+
   lazy val methods = members.collect { case m: MethodSymbol => MethodInfo(m) }.toSeq
+
+  lazy val declared = decls.collect { case m: MethodSymbol => MethodInfo(m) }.toSeq
 
   lazy val classes = members.collect { case cs: ClassSymbol => ClassInfo(cs) }.toSeq
 

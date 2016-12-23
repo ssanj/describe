@@ -49,6 +49,10 @@ package object describe {
 
   def members[T: TypeTag](value: T) = api.members.info[T](value)
 
+  def declaredOn[T: TypeTag] = api.members.info[T].declared
+
+  def declaredOn[T: TypeTag](value: T) = api.members.info[T](value).declared
+
   def vars[T: TypeTag]    = api.members.info[T].vars
 
   def vals[T: TypeTag]    = api.members.info[T].vals
@@ -61,13 +65,13 @@ package object describe {
   //access to the current mirror
   lazy val cm = scala.reflect.runtime.currentMirror
 
-  lazy val anyMethods = methods[Any]
+  lazy val anyMethods = declaredOn[Any]
 
-  lazy val anyRefMethods = methods[AnyRef]
+  lazy val anyRefMethods = declaredOn[AnyRef]
 
-  lazy val productMethods = methods[Product]
+  lazy val productMethods = declaredOn[Product]
 
-  lazy val serializableMethods = methods[Serializable] ++ methods[java.io.Serializable]
+  lazy val serializableMethods = declaredOn[Serializable] ++ declaredOn[java.io.Serializable]
 
   implicit def imSeqToFormat[T: Show](values: Seq[T]): Format[T] = new Format[T](values, implicitly[Show[T]])
 
