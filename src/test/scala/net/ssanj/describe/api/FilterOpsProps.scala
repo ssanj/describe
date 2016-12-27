@@ -14,9 +14,9 @@ object FilterOpsProps extends Properties("FilterOps") {
     id: String): Prop = {
     Prop.forAll(genMemberInfo) { mi: MemberInfo =>
       Prop.collect(mi.fullName){
-        val miMethods = mi.methods
+        val miMethods        = mi.methods
         val miMethodsRemoved = withMethodsRemoved(miMethods).map(MethodNameShow)
-        val expectedMethods = miMethods.filterNot(methodsToRemove.contains).map(MethodNameShow)
+        val expectedMethods  = miMethods.filterNot(methodsToRemove.contains).map(MethodNameShow)
 
         propAssert("Methods should not be empty.")(Seq(true), Seq(miMethods.nonEmpty)) &&
         propAssert(s"Methods should not contain $id methods.")(expectedMethods, miMethodsRemoved)
@@ -24,7 +24,11 @@ object FilterOpsProps extends Properties("FilterOps") {
     }
   }
 
-  property("withoutAny") = assertWithout(_.withoutAny, anyMethods, "Any")
+  property("withoutAny")     = assertWithout(_.withoutAny, anyMethods, "Any")
 
-  property("withoutAnyRef") = assertWithout(_.withoutAnyRef, anyRefMethods, "AnyRef")
+  property("withoutAnyRef")  = assertWithout(_.withoutAnyRef, anyRefMethods, "AnyRef")
+
+  property("withoutProduct") = assertWithout(_.withoutProduct, productMethods, "Product")
+
+  property("withoutSerial")  = assertWithout(_.withoutSerial, serializableMethods, "Serializable")
 }
