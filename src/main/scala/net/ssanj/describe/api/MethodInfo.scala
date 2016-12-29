@@ -16,6 +16,9 @@ object MethodInfo {
   implicit def toTermOpsFromMethodInfo(methodInfo: MethodInfo) = toTermOps(methodInfo.ms)
 
   implicit def toMethodOpsFromMethodInfo(methodInfo: MethodInfo) = toMethodOps(methodInfo.ms)
+
+  implicit def methodInfoToTransform(values: Seq[MethodInfo]): Transform[MethodInfo] =
+    new Transform[MethodInfo](values)
 }
 
 final case class ParamInfo(private val sm: Symbol) extends SymbolAttr {

@@ -35,3 +35,8 @@ How does the "normal" equals matching working with Symbol? Does it change if we 
 How to handle typeclasses in a context? Show for fullMethodNames, Show for name, show for Method definitions? Add context as a type param?
 
 Show[Context, T]
+
+What is the difference in the Repl between a String and writing to standout?
+ Strings seem to be constrained by the lenght of vals.isettings.maxPrintString, while println does not.
+
+How do we incorporate sorting into the query dsl?

@@ -6,7 +6,7 @@ import scala.language.implicitConversions
 package object describe {
 
   import scala.tools.nsc.interpreter.{StdReplVals, ISettings}
-  import api.{Format, Show, Print}
+  import api.{Format, Show, Sorted, Print}
 
   /** Sets the maximum output line length (in characters) for any repl output.
     * This is done via the '''maxPrintString''' field of the ISettings
@@ -73,10 +73,14 @@ package object describe {
 
   lazy val serializableMethods = declaredOn[Serializable] ++ declaredOn[java.io.Serializable]
 
+  def shortNames = api.Transform.shortNames(_)
+
   implicit def imSeqToFormat[T: Show](values: Seq[T]): Format[T] = new Format[T](values, implicitly[Show[T]])
 
-  implicit def imStringToPrint(value: String): Print = new Print(value)
+  implicit def imSeqToSorted[T: Show](values: Seq[T]): Sorted[T] = new Sorted[T](values, implicitly[Show[T]])
 
   implicit def describeToReflectType(t: ru.Type): scala.reflect.runtime.universe.Type = t.asInstanceOf[scala.reflect.runtime.universe.Type]
+
+  implicit def stringtToPrint(value: String): Print = new Print(value)
 }
 

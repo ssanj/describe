@@ -31,7 +31,6 @@ package object api extends ToSymbolOps
     if (owner.isType && owner.isPackage)
   } yield MemberInfo(owner.asType.toType)
 
-
   private[api] val rm = u.runtimeMirror(getClass.getClassLoader)
 }
 
