@@ -15,8 +15,8 @@ object FilterOpsProps extends Properties("FilterOps") {
     Prop.forAll(genMemberInfo) { mi: MemberInfo =>
       Prop.collect(mi.fullName){
         val miMethods        = mi.methods
-        val miMethodsRemoved = withMethodsRemoved(miMethods).map(MethodNameShow(_))
-        val expectedMethods  = miMethods.filterNot(methodsToRemove.contains).map(MethodNameShow(_))
+        val miMethodsRemoved = withMethodsRemoved(miMethods).map(show.MethodNameShow(_))
+        val expectedMethods  = miMethods.filterNot(methodsToRemove.contains).map(show.MethodNameShow(_))
 
         propAssert("Methods should not be empty.")(Seq(true), Seq(miMethods.nonEmpty)) &&
         propAssert(s"Methods should not contain $id methods.")(expectedMethods, miMethodsRemoved)

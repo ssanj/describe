@@ -77,7 +77,7 @@ package object describe {
 
   implicit def imSeqToFormat[T: Show](values: Seq[T]): Format[T] = new Format[T](values, implicitly[Show[T]])
 
-  implicit def imSeqToSorted[T: Show](values: Seq[T]): Sorted[T] = new Sorted[T](values, implicitly[Show[T]])
+  implicit def imSeqToSorted[T](values: Seq[T]): Sorted[T] = new Sorted[T](values)
 
   implicit def describeToReflectType(t: ru.Type): scala.reflect.runtime.universe.Type = t.asInstanceOf[scala.reflect.runtime.universe.Type]
 
