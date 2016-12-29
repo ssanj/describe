@@ -8,9 +8,9 @@ Should provide quick access to the following for a type:
 1. constructors
   1. Allow searching by param types
 1. classes
-1. baseclasses
+1. baseclasses [x]
 1. subclasses
-1. implicits (across the companion as well)
+1. implicits (across the companion as well) [x]
 1. Final type
 1. Alias (if any)
 

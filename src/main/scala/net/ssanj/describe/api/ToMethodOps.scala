@@ -30,5 +30,7 @@ trait ToMethodOps {
       val result = mirror.reflectMethod(methodSymbol).apply()
       Try(result.asInstanceOf[T]).toOption
     }
+
+    lazy val paramLists: List[List[ParamInfo]] = methodSymbol.paramLists.map(_.map(ParamInfo))
   }
 }
