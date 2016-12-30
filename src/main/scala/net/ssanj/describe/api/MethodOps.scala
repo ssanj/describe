@@ -18,6 +18,8 @@ trait MethodOps {
 
   val hasTypeParams: Boolean
 
+  val typeParams: Seq[MemberInfo]
+
   val paramLists: List[List[ParamInfo]]
 
   def invoke[T](mirror: InstanceMirror): Option[T]

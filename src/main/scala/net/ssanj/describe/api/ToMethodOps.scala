@@ -19,7 +19,10 @@ trait ToMethodOps {
 
     lazy val isParameterless: Boolean = methodSymbol.paramLists.flatten.isEmpty
 
-    lazy val hasTypeParams: Boolean = methodSymbol.typeParams.nonEmpty
+    lazy val hasTypeParams: Boolean = typeParams.nonEmpty
+
+    lazy val typeParams: Seq[MemberInfo] =
+      methodSymbol.typeParams.collect { case tp if tp.isType => MemberInfo(tp.asType.toType) }
 
     lazy val isFlag: Boolean =
       isParameterless &&

@@ -7,7 +7,8 @@ package object api extends ToSymbolOps
                    with    ToTermOps
                    with    ToMethodOps
                    with    ToMemberOps
-                   with    ToFilterOps {
+                   with    ToFilterOps
+                   with    ToMethodSignaureOps {
 
   object members extends api.Members
 
