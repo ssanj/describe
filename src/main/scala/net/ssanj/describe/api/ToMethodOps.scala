@@ -34,6 +34,6 @@ trait ToMethodOps {
       Try(result.asInstanceOf[T]).toOption
     }
 
-    lazy val paramLists: List[List[ParamInfo]] = methodSymbol.paramLists.map(_.map(ParamInfo))
+    lazy val paramLists: List[List[ParamInfo]] = methodSymbol.paramLists.map(_.map(ParamInfo(_)))
   }
 }

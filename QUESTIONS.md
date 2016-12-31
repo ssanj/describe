@@ -40,3 +40,5 @@ What is the difference in the Repl between a String and writing to standout?
  Strings seem to be constrained by the lenght of vals.isettings.maxPrintString, while println does not.
 
 How do we incorporate sorting into the query dsl?
+
+What types are encapsulated in ParamInfo? Is it always ClassSymbol? TypeSymbol?
