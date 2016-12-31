@@ -44,11 +44,20 @@ object MethodSignature {
     else ps.map(_.name).mkString("[", ", ", "]")
   }
 
+  private def formatReturnType(mi: MemberInfo): String = {
+    val types =
+      if (mi.asClass.isEmpty) ""
+      else formatTypeParams(mi.asClass.toSeq.flatMap(_.typeParams))
+
+    s"${mi.name}${types}"
+  }
+
   implicit val methodSignatureShow = Show.create[MethodSignature]{ ms =>
     val typeParams = formatTypeParams(ms.typeParams)
     val params     = formatParams(ms.paramLists)
+    val returnType = formatReturnType(ms.returnType)
 
-    s"def ${ms.name}${typeParams}${params}: ${ms.returnType.name}"
+    s"def ${ms.name}${typeParams}${params}: ${returnType}"
   }
 
     implicit val methodNameShowOrdering =  new Ordering[MethodSignature] {
