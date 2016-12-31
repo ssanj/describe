@@ -28,15 +28,25 @@ final case class MethodSignature(
   returnType: MemberInfo)
 
 object MethodSignature {
+
+  private def formatParams(ps: Seq[Seq[ParamInfo]]): String = {
+    if (ps.isEmpty) ""
+    else ps.map(formatParam).mkString
+  }
+
+   private def formatParam(ps: Seq[ParamInfo]): String = {
+    if (ps.isEmpty) ""
+    else ps.map(p => s"${p.name}: ${p.paramType}").mkString("(", ", ", ")")
+  }
+
+  private def formatTypeParams(ps: Seq[MemberInfo]): String = {
+    if (ps.isEmpty) ""
+    else ps.map(_.name).mkString("[", ", ", "]")
+  }
+
   implicit val methodSignatureShow = Show.create[MethodSignature]{ ms =>
-    val typeParams = if (ms.typeParams.isEmpty) "" else ms.typeParams.map(_.name).mkString("[", ", "  ,"]")
-    val params =
-      if (ms.paramLists.isEmpty) ""
-      else {
-        def formatParams(ps: Seq[ParamInfo]): String =
-          ps.map(p => s"${p.name}: ${p.paramType}").mkString("(", ", ", ")")
-        ms.paramLists.map(formatParams).mkString
-      }
+    val typeParams = formatTypeParams(ms.typeParams)
+    val params     = formatParams(ms.paramLists)
 
     s"def ${ms.name}${typeParams}${params}: ${ms.returnType.name}"
   }
