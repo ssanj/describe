@@ -9,6 +9,7 @@ package object api extends ToSymbolOps
                    with    ToMemberOps
                    with    ToFilterOps
                    with    ToMethodSignaureOps
+                   with    ToMethodSignatureSeqOps
                    with    ToClassOps {
 
   object members extends api.Members
@@ -26,6 +27,9 @@ package object api extends ToSymbolOps
   private[api] def getTermSymbol(t: u.Type): Option[u.TermSymbol] = Try {
     t.termSymbol.asTerm
   }.toOption.filterNot(_ == u.NoSymbol)
+
+  private[api] def hasEmptySymbol(t: u.Type): Boolean =
+    getTypeSymbol(t).orElse(getTermSymbol(t)).isDefined
 
   private[api] def getPackage[T: u.TypeTag]: Option[MemberInfo] = for {
     ts <- getTypeSymbol(u.typeOf[T])

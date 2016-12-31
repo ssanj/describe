@@ -19,4 +19,7 @@ object MethodInfo {
     new Transform[MethodInfo](values)
 
   implicit def toMethodSignatureFromMethodInfo(mi: MethodInfo) = toMethodSignatureOps(mi)
+
+  implicit def toMethodSignatureSeqFromMethodInfoSeq(values: Seq[MethodInfo]) =
+    toMethodSignatureSeqOps(values)
 }

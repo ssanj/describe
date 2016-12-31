@@ -21,7 +21,13 @@ object MethodSignature {
 
   private def formatTypeParams(ps: Seq[MemberInfo]): String = {
     if (ps.isEmpty) ""
-    else ps.map(_.name).mkString("[", ", ", "]")
+    else ps.map(p => p.name +
+                    {
+                      val resultType = p.typeSignature.resultType
+                      if (hasEmptySymbol(resultType)) ""
+                      else resultType.toString
+                    }
+               ).mkString("[", ", ", "]")
   }
 
   private def formatReturnType(mi: MemberInfo): String = {
