@@ -46,3 +46,10 @@ How do we incorporate sorting into the query dsl?
 What types are encapsulated in ParamInfo? Is it always ClassSymbol? TypeSymbol?
 
 When should we return implicit instances? Do they count as 'methods'?
+
+Do we need 'Transform'? Can we simply use map with helper methods
+like: map(shortNames) or map(methodSignature)
+
+Where do we use isPackageClass? For classes defined in a package object?
+
+Do we need to return ModuleClasses when looking for classes? As in match on Module Classes or Modules and then get their classes?

@@ -59,6 +59,8 @@ package object describe {
 
   def classes[T: TypeTag] = api.members.info[T].classes
 
+  def modules[T: TypeTag] = api.members.info[T].modules
+
   //access to the reflection universe
   lazy val ru = scala.reflect.runtime.universe
 

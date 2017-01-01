@@ -44,3 +44,5 @@ Features:
 
     methods[T].defaults -> should be the same as:
     methods[T].methodSignature.sortAlpha.num.print
+
+3. Add methodName Transform implicit. (MethodNameOps)
