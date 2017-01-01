@@ -73,6 +73,8 @@ trait MemberOps {
 
   lazy val implicitClasses: Seq[ClassInfo] = classes.filter(_.isImplicit)
 
+  lazy val implicitModules: Seq[ModuleInfo] = modules.filter(_.isImplicit)
+
   lazy val allImplicitMethods: Seq[MethodInfo] = {
     implicitMethods ++
     companion.toSeq.flatMap(_.implicitMethods)
