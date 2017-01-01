@@ -33,6 +33,8 @@ Should we only list public entities?
 How does the "normal" equals matching working with Symbol? Does it change if we have different owners?
 
 How to handle typeclasses in a context? Show for fullMethodNames, Show for name, show for Method definitions? Add context as a type param?
+ - an easier was is to wrap each type in a "context" then define Shows for those.
+ - given a Person => FullName(Person), FirstName(Person)
 
 Show[Context, T]
 
@@ -42,3 +44,5 @@ What is the difference in the Repl between a String and writing to standout?
 How do we incorporate sorting into the query dsl?
 
 What types are encapsulated in ParamInfo? Is it always ClassSymbol? TypeSymbol?
+
+When should we return implicit instances? Do they count as 'methods'?
