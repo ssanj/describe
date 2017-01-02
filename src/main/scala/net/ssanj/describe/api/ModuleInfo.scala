@@ -2,7 +2,7 @@ package net.ssanj.describe.api
 
 import scala.reflect.runtime.universe._
 
-final case class ModuleInfo(private val ms: ModuleSymbol) extends SymbolAttr {
+final case class ModuleInfo(private val ms: ModuleSymbol) {
   val symbol = ms.asInstanceOf[Symbol]
 }
 

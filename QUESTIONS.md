@@ -39,7 +39,7 @@ How to handle typeclasses in a context? Show for fullMethodNames, Show for name,
 Show[Context, T]
 
 What is the difference in the Repl between a String and writing to standout?
- Strings seem to be constrained by the lenght of vals.isettings.maxPrintString, while println does not.
+ Strings seem to be constrained by the length of vals.isettings.maxPrintString, while println does not.
 
 How do we incorporate sorting into the query dsl?
 
@@ -48,8 +48,10 @@ What types are encapsulated in ParamInfo? Is it always ClassSymbol? TypeSymbol?
 When should we return implicit instances? Do they count as 'methods'?
 
 Do we need 'Transform'? Can we simply use map with helper methods
-like: map(shortNames) or map(methodSignature)
+like: map(shortNames) or map(methodSignature).
+ - Replace with map and custom methods.
 
 Where do we use isPackageClass? For classes defined in a package object?
 
 Do we need to return ModuleClasses when looking for classes? As in match on Module Classes or Modules and then get their classes?
+ - No, these should be returned for module.

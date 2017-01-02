@@ -16,7 +16,7 @@ Should provide quick access to the following for a type:
 
 ----
 
-1. List members of a package.
+1. List members of a package. (works only with preloaded packages like scala. Use a library to get this functionality)
 2. Find package of a type (http://stackoverflow.com/questions/21428795/scala-reflection-derive-package-name)
 3. reflective find a type that satisfies a relationship within a hierarchy/package (http://stackoverflow.com/questions/18247002/scala-reflection-search)
 4. Given a method name, return the class in which it is defined/overridden
@@ -38,15 +38,40 @@ This seems to be a reflection API issue. If we use Type.toString we get the corr
 
 Features:
 
-1. Add a ClassSignature class for printing out classes
+1. Add a ClassSignature class for printing out classes [x]
 
-2. Have a default profile to reduce verbosity of dsl:
+2. Add a ModuleSignature class for printing out modules [x]
+
+3. Have a default profile to reduce verbosity of dsl:
 
     methods[T].defaults -> should be the same as:
     methods[T].methodSignature.sortAlpha.num.print
 
-3. Add methodName Transform implicit. (MethodNameOps)
+4. Add methodName Transform implicit. (MethodNameOps)
 
-4. Add the ability to list members of a module.
+5. Add the ability to list members of a module. [x]
 
-5. Add the ability to list members of a class.
+6. Add the ability to list members of a class. [x]
+
+7. Rename <init> -> The name of the class.
+
+8. Add deprecated modifier to classes, modules and methods. [x]
+
+9. Add .summary format to display a summary of a type:
+    1. methods
+    2. classes
+    3. modules
+
+    Similar to .info but more usable.
+
+10. Return implicit instances available.
+
+11. List methods of type such as Option should take into account any implicit conversions in its companion object and scala.Predef.
+
+12. Add a 'rType' and 'symbol' variables to each type and symbol respectively.
+
+13. Add a ValSignature class for printing out Vals.
+
+14. Add a VarSignature class for printing out Vars.
+
+15. All type-like classes should have all type-related functionality. (methods, classes, superclasses, subclasses)

@@ -1,11 +1,5 @@
 package net.ssanj.describe.api
 
-trait SymbolAttr {
-  val symbol: scala.reflect.runtime.universe.Symbol
-  lazy val name: String = getName(symbol)
-  lazy val fullName: String = symbol.fullName
-}
-
 trait SymbolFlags {
   def isAbstract: Boolean
   def isAbstractOverride: Boolean

@@ -12,11 +12,13 @@ trait ToModuleOps {
       else Option(ClassInfo(cs.asClass))
     }
 
-    lazy val methods = moduleClass.toSeq.flatMap(_.methods)
+    private lazy val moduleClassSeq = moduleClass.toSeq
 
-    lazy val modules = moduleClass.toSeq.flatMap(_.modules)
+    private def fromMemberInfo[T](f: MemberInfo => Seq[T]): Seq[T] =
+      moduleClassSeq.flatMap(f.compose((c:ClassInfo) => c.asType))
 
-    lazy val classes = moduleClass.toSeq.flatMap(_.classes)
+    lazy val members = moduleClass.map(_.members)
 
+    lazy val membersSeq = members.toSeq
   }
 }

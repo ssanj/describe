@@ -9,7 +9,8 @@ trait ToMethodSignaureOps {
         name       = mi.name,
         typeParams = mi.typeParams,
         paramLists = mi.paramLists,
-        returnType = mi.returnType
+        returnType = mi.returnType,
+        symbol     = mi.symbol
       )
   }
 }

@@ -1,11 +1,14 @@
 package net.ssanj.describe
 package api
 
+import scala.reflect.runtime.{universe => u}
+
 final case class MethodSignature(
   name: String,
   typeParams: Seq[MemberInfo],
   paramLists: List[List[ParamInfo]],
-  returnType: MemberInfo)
+  returnType: MemberInfo,
+  symbol    : u.Symbol)
 
 object MethodSignature {
 
@@ -42,8 +45,9 @@ object MethodSignature {
     val typeParams = formatTypeParams(ms.typeParams)
     val params     = formatParams(ms.paramLists)
     val returnType = formatReturnType(ms.returnType)
+    val dep        = modifiers(isDeprecated(ms.symbol), "[deprecated]")
 
-    s"def ${ms.name}${typeParams}${params}: ${returnType}"
+    s"${dep}def ${ms.name}${typeParams}${params}: ${returnType}"
   }
 
   implicit val methodNameShowOrdering =  new Ordering[MethodSignature] {
