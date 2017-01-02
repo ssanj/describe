@@ -29,5 +29,11 @@ trait ToClassOps {
 
     lazy val typeParams          =
       cs.typeParams.collect { case tp if tp.isType => MemberInfo(tp.asType.toType) }
+
+    lazy val methods = asType.methods
+
+    lazy val modules = asType.modules
+
+    lazy val classes = asType.classes
   }
 }

@@ -38,6 +38,16 @@ package object api extends ToSymbolOps
     if (owner.isType && owner.isPackage)
   } yield MemberInfo(owner.asType.toType)
 
+  lazy val deprecatedType = u.typeOf[scala.deprecated]
+
+  private[api] def isDeprecated(symbol: u.Symbol): Boolean = {
+    val ann = symbol.annotations
+    ann.nonEmpty && ann.head.tree.tpe =:= deprecatedType
+  }
+
+  private[api] def modifiers(b: Boolean, whenTrue: String, whenFalse: String = ""): String =
+      if (b) s"${whenTrue} " else whenFalse
+
   private[api] val rm = u.runtimeMirror(getClass.getClassLoader)
 }
 

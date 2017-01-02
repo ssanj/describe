@@ -46,3 +46,7 @@ Features:
     methods[T].methodSignature.sortAlpha.num.print
 
 3. Add methodName Transform implicit. (MethodNameOps)
+
+4. Add the ability to list members of a module.
+
+5. Add the ability to list members of a class.

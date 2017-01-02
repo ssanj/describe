@@ -26,4 +26,10 @@ trait ClassOps {
   val subclasses: Seq[ClassInfo]
 
   val typeParams: Seq[MemberInfo]
+
+  val methods: Seq[MethodInfo]
+
+  val modules: Seq[ModuleInfo]
+
+  val classes: Seq[ClassInfo]
 }
