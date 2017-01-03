@@ -32,7 +32,7 @@ members[scala.math.Ordering.type].methodsByName("ordered").methodSignature.nl.pr
 gives:
     def ordered[A](evidence$1: A => Comparable[A]): Ordering[T]
 
-This seems to be a reflection API issue. If we use Type.toString we get the correct Answer. This might be a workaround we need.
+This seems to be a reflection API issue. If we use Type.toString we get the correct Answer. This might be a workaround we need. [x]
 
 2. All implicit does not return implicit instances, only implicit classes and methods.
 
@@ -70,8 +70,8 @@ Features:
 
 12. Add a 'rType' and 'symbol' variables to each type and symbol respectively.
 
-13. Add a ValSignature class for printing out Vals.
+13. Add a ValSignature class for printing out Vals. [x]
 
-14. Add a VarSignature class for printing out Vars.
+14. Add a VarSignature class for printing out Vars. [x]
 
 15. All type-like classes should have all type-related functionality. (methods, classes, superclasses, subclasses) [x]
