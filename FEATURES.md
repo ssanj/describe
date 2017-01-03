@@ -70,8 +70,8 @@ Features:
 
 12. Add a 'rType' and 'symbol' variables to each type and symbol respectively.
 
-13. Add a ValSignature class for printing out Vals.
+13. Add a ValSignature class for printing out Vals. [x]
 
-14. Add a VarSignature class for printing out Vars.
+14. Add a VarSignature class for printing out Vars. [x]
 
 15. All type-like classes should have all type-related functionality. (methods, classes, superclasses, subclasses) [x]
