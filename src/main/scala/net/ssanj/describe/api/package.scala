@@ -18,6 +18,9 @@ package object api extends ToSymbolOps
   private[api] def getName(symbol: u.Symbol): String =
     s"${symbol.name.decodedName.toString}"
 
+  private[api] def getOwnerName(symbol: u.Symbol): Option[String] =
+    Try(symbol.owner).toOption.map(getName)
+
   private[api] def getTypeName(tpe: u.Type): Option[String] =
   getTypeSymbol(tpe) orElse(getTermSymbol(tpe)) map(_.fullName)
 

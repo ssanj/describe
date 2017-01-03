@@ -4,11 +4,12 @@ package api
 import scala.reflect.runtime.{universe => u}
 
 final case class MethodSignature(
-  name: String,
-  typeParams: Seq[MemberInfo],
-  paramLists: List[List[ParamInfo]],
-  returnType: MemberInfo,
-  symbol    : u.Symbol)
+  name         : String,
+  typeParams   : Seq[MemberInfo],
+  paramLists   : List[List[ParamInfo]],
+  returnType   : MemberInfo,
+  symbol       : u.Symbol,
+  isConstructor: Boolean)
 
 object MethodSignature {
 
@@ -46,8 +47,9 @@ object MethodSignature {
     val params     = formatParams(ms.paramLists)
     val returnType = formatReturnType(ms.returnType)
     val dep        = modifiers(isDeprecated(ms.symbol), "[deprecated]")
+    val constr     = modifiers(ms.isConstructor, "[constructor]")
 
-    s"${dep}def ${ms.name}${typeParams}${params}: ${returnType}"
+    s"${dep}${constr}def ${ms.name}${typeParams}${params}: ${returnType}"
   }
 
   implicit val methodNameShowOrdering =  new Ordering[MethodSignature] {

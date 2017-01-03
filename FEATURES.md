@@ -53,7 +53,7 @@ Features:
 
 6. Add the ability to list members of a class. [x]
 
-7. Rename <init> -> The name of the class.
+7. Rename <init> -> The name of the class. [x]
 
 8. Add deprecated modifier to classes, modules and methods. [x]
 
@@ -74,4 +74,4 @@ Features:
 
 14. Add a VarSignature class for printing out Vars.
 
-15. All type-like classes should have all type-related functionality. (methods, classes, superclasses, subclasses)
+15. All type-like classes should have all type-related functionality. (methods, classes, superclasses, subclasses) [x]
