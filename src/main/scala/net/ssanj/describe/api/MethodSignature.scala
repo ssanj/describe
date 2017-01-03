@@ -35,11 +35,12 @@ object MethodSignature {
   }
 
   private def formatReturnType(mi: MemberInfo): String = {
-    val types =
-      if (mi.asClass.isEmpty) ""
-      else formatTypeParams(mi.asClass.toSeq.flatMap(_.typeParams))
+    // val types =
+    //   if (mi.asClass.isEmpty) ""
+    //   else formatTypeParams(mi.asClass.toSeq.flatMap(_.typeParams))
 
-    s"${mi.name}${types}"
+    // s"${mi.name}${types}"
+    mi.resultType.toString
   }
 
   implicit val methodSignatureShow = Show.create[MethodSignature]{ ms =>
