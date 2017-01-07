@@ -49,8 +49,9 @@ object MethodSignature {
     val returnType = formatReturnType(ms.returnType)
     val dep        = modifiers(isDeprecated(ms.symbol), "[deprecated]")
     val constr     = modifiers(ms.isConstructor, "[constructor]")
+    val isImplicit = modifiers(ms.symbol.isImplicit, "implicit")
 
-    s"${dep}${constr}def ${ms.name}${typeParams}${params}: ${returnType}"
+    s"${dep}${constr}${isImplicit}def ${ms.name}${typeParams}${params}: ${returnType}"
   }
 
   implicit val methodNameShowOrdering =  new Ordering[MethodSignature] {

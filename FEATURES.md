@@ -75,3 +75,5 @@ Features:
 14. Add a VarSignature class for printing out Vars. [x]
 
 15. All type-like classes should have all type-related functionality. (methods, classes, superclasses, subclasses) [x]
+
+16. MethodSignature should specify whether it is an implicit. [x]
