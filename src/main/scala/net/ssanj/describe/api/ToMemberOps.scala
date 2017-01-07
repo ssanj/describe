@@ -71,8 +71,14 @@ trait ToMemberOps {
           !(m.returnType.resultType.erasure =:= getType())
         } map (_.returnType)
 
-      //TODO:We should be checking the primary constructor takes getType's result
-      val iclasses = allImplicitClasses map (_.asType)
+      val iclasses =
+        allImplicitClasses.filter {ci =>
+            ci.
+            members.
+            constructors.
+            exists(mi => mi.paramLists.flatten.length == 1 &&
+                        mi.paramLists.flatten.head.paramType.erasure =:= getType())
+        }.map(_.asType)
 
       imethods ++ iclasses
     }

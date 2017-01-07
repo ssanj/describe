@@ -34,7 +34,7 @@ gives:
 
 This seems to be a reflection API issue. If we use Type.toString we get the correct Answer. This might be a workaround we need. [x]
 
-2. All implicit does not return implicit instances, only implicit classes and methods.
+2. All implicit does not return implicit instances, only implicit classes and methods. [x]
 
 Features:
 
@@ -65,8 +65,11 @@ Features:
     Similar to .info but more usable.
 
 10. Return implicit instances available.
+    It seems like implicit instances are returned as implicit methods. [x]
 
-11. List methods of type such as Option should take into account any implicit conversions in its companion object and scala.Predef.
+11. List methods of type such as Option should take into account any implicit conversions in:
+ 1. companion object [x]
+ 2. scala.Predef.
 
 12. Add a 'rType' and 'symbol' variables to each type and symbol respectively.
 

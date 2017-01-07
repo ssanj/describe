@@ -11,6 +11,10 @@ trait MemberOps {
 
   lazy val methods = members.collect { case m: MethodSymbol => MethodInfo(m) }.toSeq
 
+  lazy val methodsX =
+    methods ++
+    implicitConversionTypes.flatMap(_.methods)
+
   lazy val declared = decls.collect { case m: MethodSymbol => MethodInfo(m) }.toSeq
 
   lazy val classes = members.collect { case cs: ClassSymbol => ClassInfo(cs) }.toSeq
