@@ -9,6 +9,16 @@ object MemberInfo {
 
   //Going to a TypeSymbol from a Type should always be safe.
   implicit def toSymbolOpsFromMemberInfo(mi: MemberInfo): SymbolOps = toSymbolOps(mi.ttType.typeSymbol)
+
+  implicit val memberInfoShow: Show[MemberInfo] =
+    Show.create[MemberInfo](mi => s"${mi.fullName}")
+
+  import scala.math.Ordering
+
+  implicit val memberInfoOrdering: Ordering[MemberInfo] = new Ordering[MemberInfo] {
+    override def compare(m1: MemberInfo, m2: MemberInfo): Int =
+      m1.fullName compare m2.fullName
+  }
 }
 
 

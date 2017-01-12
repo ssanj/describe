@@ -55,3 +55,11 @@ Where do we use isPackageClass? For classes defined in a package object?
 
 Do we need to return ModuleClasses when looking for classes? As in match on Module Classes or Modules and then get their classes?
  - No, these should be returned for module.
+
+Which implicit conversions should we automatically add?
+ - Ones from the companion object? [yes]
+ - Predef. Maybe confusing. Eg. WrappedString vs StringOps
+
+What does it mean to have a private val within a case class?
+
+Why does None require an ascription (None: Option[T]) and none[T] does not?

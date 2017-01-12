@@ -274,14 +274,83 @@ To list classes of a type use:
 classes[Type]
 ```
 
-For example to list the classes on Option:
+For example to list the classes in Predef:
 
 ```
-classes[Option[_]]
+classes[Predef.type].nl.print
 ```
 
-which yields a Seq of __ClassInfo__ instances:
+will return:
 
 ```
-res66: Seq[net.ssanj.describe.api.ClassInfo] = List(ClassInfo(class WithFilter))
+class DummyImplicit
+sealed abstract class =:=[From,To]
+sealed abstract class <:<[From,To]
+implicit final class ArrayCharSequence
+implicit final class SeqCharSequence
+implicit final class RichException
+implicit final class any2stringadd[A]
+final class StringAdd[A]
+implicit final class StringFormat[A]
+implicit final class Ensuring[A]
+implicit final class ArrowAssoc[A]
+```
+
+## vals ##
+
+To list vals of a type use:
+
+```
+vals[Type]
+```
+
+For example to list vals defined in Predef:
+
+```
+vals[Predef.type].nl.print
+```
+
+which yields:
+
+```
+scala> vals[Predef.type].nl.print
+val singleton_=:=: =:=[Any,Any]
+val singleton_<:<: <:<[Any,Any]
+val StringCanBuildFrom : scala.collection.generic.CanBuildFrom[String,Char,String]
+val NoManifest : reflect.NoManifest.type
+val Manifest : scala.reflect.ManifestFactory.type
+val ClassManifest : scala.reflect.ClassManifestFactory.type
+val Set : scala.collection.immutable.Set.type
+val Map : scala.collection.immutable.Map.type
+```
+
+## vars ##
+
+To list vars of a type use:
+
+```
+vars[Type]
+```
+
+For example given a class Blah:
+
+```
+class Blah {
+  var count = 0
+  var errors = ""
+  val time = java.time.ZonedDateTime.now()
+}
+```
+
+lists vars with:
+
+```
+vars[Blah].nl.print
+```
+
+which yields:
+
+```
+var count : scala.Int
+var errors : java.lang.String
 ```
