@@ -6,7 +6,7 @@ import scala.language.implicitConversions
 package object describe {
 
   import scala.tools.nsc.interpreter.{StdReplVals, ISettings}
-  import api.{Format, Show, Sorted, Print}
+  import api.{Defaults, Format, Show, Sorted, Print}
 
   /** Sets the maximum output line length (in characters) for any repl output.
     * This is done via the '''maxPrintString''' field of the ISettings
@@ -80,6 +80,8 @@ package object describe {
   def shortNames = api.Transform.shortNames(_)
 
   implicit def imSeqToFormat[T: Show](values: Seq[T]): Format[T] = new Format[T](values, implicitly[Show[T]])
+
+  implicit def imSeqToDefaults[T: Show : Ordering](values: Seq[T]): Defaults[T] = new Defaults[T](values)
 
   implicit def imSeqToSorted[T](values: Seq[T]): Sorted[T] = new Sorted[T](values)
 
