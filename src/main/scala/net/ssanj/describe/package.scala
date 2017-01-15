@@ -79,6 +79,8 @@ package object describe {
 
   def shortNames = api.Transform.shortNames(_)
 
+  def getPackage[T: TypeTag] = api.getPackage[T]
+
   implicit def imSeqToFormat[T: Show](values: Seq[T]): Format[T] = new Format[T](values, implicitly[Show[T]])
 
   implicit def imSeqToDefaults[T: Show : Ordering](values: Seq[T]): Defaults[T] = new Defaults[T](values)
