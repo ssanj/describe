@@ -15,10 +15,7 @@ object MemberInfo {
 
   import scala.math.Ordering
 
-  implicit val memberInfoOrdering: Ordering[MemberInfo] = new Ordering[MemberInfo] {
-    override def compare(m1: MemberInfo, m2: MemberInfo): Int =
-      m1.fullName compare m2.fullName
-  }
+  implicit val memberInfoOrdering: Ordering[MemberInfo] = createOrdering[MemberInfo]
 }
 
 

@@ -52,5 +52,12 @@ package object api extends ToSymbolOps
       if (b) s"${whenTrue} " else whenFalse
 
   private[api] val rm = u.runtimeMirror(getClass.getClassLoader)
+
+  private[api] def createOrdering[T: Show] = new Ordering[T] {
+    override def compare(t1: T, t2: T): Int = {
+      val S = implicitly[Show[T]]
+      S.show(t1).compare(S.show(t2))
+    }
+  }
 }
 

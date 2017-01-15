@@ -20,4 +20,7 @@ object ModuleInfo {
       val moduleString = mi.moduleClass.map(_.asReflectType.toString).getOrElse(mi.name + ".type")
       s"${dep}${impl}${moduleString}"
     }
+
+  implicit val moduleInfoOrdering: Ordering[ModuleInfo] = createOrdering[ModuleInfo]
+
 }

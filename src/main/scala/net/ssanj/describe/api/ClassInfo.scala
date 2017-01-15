@@ -30,4 +30,6 @@ object ClassInfo {
       s"${dep}${impl}${fin}${sld}${classType}${ci.asReflectType.toString}"
     }
   }
+
+  implicit val classInfoOrdering: Ordering[ClassInfo] = createOrdering[ClassInfo]
 }
