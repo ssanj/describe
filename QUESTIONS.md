@@ -63,3 +63,11 @@ Which implicit conversions should we automatically add?
 What does it mean to have a private val within a case class?
 
 Why does None require an ascription (None: Option[T]) and none[T] does not?
+
+How do we convert between a class utils class and a describe class?
+ - load classes with class utils
+ - get currentRuntimeMirror
+ - cm.staticClass(className).toType.erasure
+ * The library has to be on the classpath for this to work.
+
+How do we get Classutils to read the correct classpath?

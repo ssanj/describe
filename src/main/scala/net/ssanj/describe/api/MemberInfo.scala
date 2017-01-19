@@ -24,4 +24,23 @@ trait Members {
   def info[T: TypeTag]: MemberInfo = MemberInfo(typeOf[T])
 
   def info[T: TypeTag](value: T): MemberInfo = MemberInfo(typeOf[T])
+
+
+  import scala.tools.nsc.util.ClassFileLookup
+  import scala.tools.nsc.io.AbstractFile
+
+  def findInstances[T: TypeTag](classpath: ClassFileLookup[AbstractFile], p: String => Boolean): Seq[MemberInfo] = {
+    import org.clapper.classutil.ClassFinder
+    import java.io.File
+    getTypeName(typeOf[T]).fold(Seq.empty[MemberInfo]) { name =>
+      val cf = ClassFinder(classpath.asURLs.collect{ case u if p(u.getFile) => new File(u.getFile) })
+      val impls = ClassFinder.concreteSubclasses(name, cf.getClasses).toList
+      impls.flatMap { ci =>
+        scala.util.Try {
+          val cs = net.ssanj.describe.cm.staticClass(ci.name)
+          MemberInfo(cs.toType)
+        }.toOption.toSeq
+      }
+    }
+  }
 }

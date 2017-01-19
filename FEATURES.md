@@ -20,7 +20,7 @@ Should provide quick access to the following for a type:
 
 ----
 
-1. List members of a package. (works only with preloaded packages like scala. Use a library to get this functionality)
+1. List members of a package. (works only with preloaded packages like scala. Use a library to get this functionality - classutils)
 2. Find package of a type (http://stackoverflow.com/questions/21428795/scala-reflection-derive-package-name) [x]
 3. reflective find a type that satisfies a relationship within a hierarchy/package (http://stackoverflow.com/questions/18247002/scala-reflection-search)
 4. Given a method name, return the class in which it is defined/overridden

@@ -51,6 +51,11 @@ package object describe {
 
   def members[T: TypeTag](value: T) = api.members.info[T](value)
 
+  import scala.tools.nsc.util.ClassFileLookup
+  import scala.tools.nsc.io.AbstractFile
+
+  def findInstances[T: TypeTag](classpath: ClassFileLookup[AbstractFile], p: String => Boolean) = api.members.findInstances[T](classpath, p)
+
   def declaredOn[T: TypeTag] = api.members.info[T].declared
 
   def declaredOn[T: TypeTag](value: T) = api.members.info[T](value).declared
