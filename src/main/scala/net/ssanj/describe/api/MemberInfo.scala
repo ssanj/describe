@@ -28,10 +28,10 @@ trait Members {
 
   import scala.tools.nsc.util.ClassFileLookup
   import scala.tools.nsc.io.AbstractFile
+  import java.io.File
 
   def findInstances[T: TypeTag](classpath: ClassFileLookup[AbstractFile], p: String => Boolean): Seq[MemberInfo] = {
     import org.clapper.classutil.ClassFinder
-    import java.io.File
     getTypeName(typeOf[T]).fold(Seq.empty[MemberInfo]) { name =>
       val cf = ClassFinder(classpath.asURLs.collect{ case u if p(u.getFile) => new File(u.getFile) })
       val impls = ClassFinder.concreteSubclasses(name, cf.getClasses).toList
@@ -43,4 +43,36 @@ trait Members {
       }
     }
   }
+
+  def filterToClasspath(powerClassPath: ClassFileLookup[AbstractFile], fileFilter: scala.util.matching.Regex): Seq[File] = {
+    powerClassPath.asURLs.collect{ case u if fileFilter.findFirstIn(u.getFile).isDefined => new File(u.getFile) }
+  }
+
+  def getPackageClasses(classpath: Seq[File], packageFilter: scala.util.matching.Regex): Seq[MemberInfo] = {
+
+      import java.util.jar.JarFile
+      import java.util.jar.JarEntry
+      import scala.collection.JavaConversions._
+
+      def getClassesFromJarFile(file: File): Seq[MemberInfo] = {
+        val jarFile = new JarFile(file)
+        //TODO: Should we Try this?
+        val entries: Iterator[JarEntry] = jarFile.entries
+        val names = entries.collect {
+          case e if e.getName.endsWith(".class") =>
+            e.getName.replace("/", ".").replace(".class", "")
+        }.filter(packageFilter.findFirstIn(_).isDefined).toSeq
+
+        names.flatMap { n => scala.util.Try(net.ssanj.describe.cm.staticClass(n).toType).map(MemberInfo(_)).toOption.toSeq }
+      }
+
+      classpath.flatMap(getClassesFromJarFile)
+  }
+
+  def findInstances2[T: TypeTag](classpath: Seq[File]): Seq[MemberInfo] =
+    getPackageClasses(classpath, ".*".r).filter(mi => mi.resultType.erasure <:< typeOf[T].erasure)
+
+
+
+
 }
