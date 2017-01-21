@@ -71,3 +71,12 @@ How do we convert between a class utils class and a describe class?
  * The library has to be on the classpath for this to work.
 
 How do we get Classutils to read the correct classpath?
+
+Why does getting fullName of the "scala." package fail with either Symbol errors, classpath errors or Match errors?
+
+  - getPackageClasses(res1,"""scala.""".r).map(_.fullName)
+    scala.MatchError: null
+
+  - getPackageClasses(res1,"""scala.""".r).flatMap(mi => scala.util.Try(mi.fullName).getOrElse("~"))
+    java.lang.NoClassDefFoundError: org/apache/tools/ant/taskdefs/MatchingTask
+    Caused by: java.lang.ClassNotFoundException: org.apache.tools.ant.taskdefs.MatchingTask

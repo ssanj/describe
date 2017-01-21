@@ -11,7 +11,8 @@ object MemberInfo {
   implicit def toSymbolOpsFromMemberInfo(mi: MemberInfo): SymbolOps = toSymbolOps(mi.ttType.typeSymbol)
 
   implicit val memberInfoShow: Show[MemberInfo] =
-    Show.create[MemberInfo](mi => s"${mi.fullName}")
+    // Show.create[MemberInfo](mi => s"${mi.fullName}")
+    Show.create[MemberInfo](mi => scala.util.Try(s"${mi.fullName}").getOrElse(mi.resultType.toString))
 
   import scala.math.Ordering
 
@@ -63,14 +64,30 @@ trait Members {
             e.getName.replace("/", ".").replace(".class", "")
         }.filter(packageFilter.findFirstIn(_).isDefined).toSeq
 
-        names.flatMap { n => scala.util.Try(net.ssanj.describe.cm.staticClass(n).toType).map(MemberInfo(_)).toOption.toSeq }
+        names.flatMap { n =>
+          scala.util.Try{
+            val tt = net.ssanj.describe.cm.staticClass(n).toType
+            tt.typeSymbol.fullName //check that we can get the full name
+            tt
+          }.map(MemberInfo(_)).toOption.toSeq }
       }
 
-      classpath.flatMap(getClassesFromJarFile)
+      classpath.filter(p => p.isFile && p.getName.endsWith(".jar")).flatMap(getClassesFromJarFile)
   }
 
   def findInstances2[T: TypeTag](classpath: Seq[File]): Seq[MemberInfo] =
-    getPackageClasses(classpath, ".*".r).filter(mi => mi.resultType.erasure <:< typeOf[T].erasure)
+    // getPackageClasses(classpath, ".*".r).filter(mi => mi.resultType.erasure <:< typeOf[T].erasure)
+    getPackageClasses(classpath, ".*".r).filter{ mi =>
+      val withAnyGen = scala.util.Try {
+        !(mi.resultType.erasure =:= typeOf[T].erasure) && mi.resultType.erasure <:< typeOf[T].erasure
+      }
+
+      val withSpecificGen = scala.util.Try{
+        !(mi.resultType =:= typeOf[T]) && mi.resultType <:< typeOf[T]
+      }
+
+      withAnyGen.orElse(withSpecificGen).getOrElse(false)
+    }
 
 
 

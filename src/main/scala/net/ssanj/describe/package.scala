@@ -86,6 +86,14 @@ package object describe {
 
   def getPackage[T: TypeTag] = api.getPackage[T]
 
+  def filterToClasspath = api.members.filterToClasspath _
+
+  def getPackageClasses = api.members.getPackageClasses _
+
+  def findInstances1[T: TypeTag] = api.members.findInstances _
+
+  def findInstances2[T: TypeTag] = api.members.findInstances2 _
+
   implicit def imSeqToFormat[T: Show](values: Seq[T]): Format[T] = new Format[T](values, implicitly[Show[T]])
 
   implicit def imSeqToDefaults[T: Show : Ordering](values: Seq[T]): Defaults[T] = new Defaults[T](values)
