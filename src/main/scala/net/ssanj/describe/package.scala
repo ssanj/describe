@@ -90,9 +90,9 @@ package object describe {
 
   def getPackageClasses = api.members.getPackageClasses _
 
-  def findInstances1[T: TypeTag] = api.members.findInstances _
+  def findInstances1[T: TypeTag] = api.members.findInstances[T] _
 
-  def findInstances2[T: TypeTag] = api.members.findInstances2 _
+  def findInstances2[T: TypeTag] = api.members.findInstances2[T] _
 
   implicit def imSeqToFormat[T: Show](values: Seq[T]): Format[T] = new Format[T](values, implicitly[Show[T]])
 
