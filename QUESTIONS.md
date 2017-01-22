@@ -80,3 +80,13 @@ Why does getting fullName of the "scala." package fail with either Symbol errors
   - getPackageClasses(res1,"""scala.""".r).flatMap(mi => scala.util.Try(mi.fullName).getOrElse("~"))
     java.lang.NoClassDefFoundError: org/apache/tools/ant/taskdefs/MatchingTask
     Caused by: java.lang.ClassNotFoundException: org.apache.tools.ant.taskdefs.MatchingTask
+
+  [x] Not using the correct classpath!
+
+How do we skip over any erroneous classes that break the package loading?
+ - Filter them out.
+   Eg. scala package loading fails on a number of classes in tools, reflect and xml: getPackageClasses(classPath, "scala\\.(?!(reflect|tools|xml))".r)
+
+How can we selectively change the type of symbol for Member from type to class?
+
+Can we retrieve the classPath programmaticly instead of needing to switch to power mode?

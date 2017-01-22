@@ -2,11 +2,15 @@ package net.ssanj
 
 import scala.reflect.runtime.universe.TypeTag
 import scala.language.implicitConversions
+import java.io.File
 
 package object describe {
 
   import scala.tools.nsc.interpreter.{StdReplVals, ISettings}
   import api.{Defaults, Format, Show, Sorted, Print}
+  import scala.tools.nsc.util.ClassFileLookup
+  import scala.tools.nsc.io.AbstractFile
+
 
   /** Sets the maximum output line length (in characters) for any repl output.
     * This is done via the '''maxPrintString''' field of the ISettings
@@ -86,13 +90,17 @@ package object describe {
 
   def getPackage[T: TypeTag] = api.getPackage[T]
 
-  def filterToClasspath = api.members.filterToClasspath _
+  implicit def toCp = api.members.toCp _
 
-  def getPackageClasses = api.members.getPackageClasses _
+  def getPackageClasses(classpath: Seq[File], packageFilter: scala.util.matching.Regex,
+    verbose: Boolean = false) = api.members.getPackageClasses(classpath, packageFilter, verbose)
 
-  def findInstances1[T: TypeTag] = api.members.findInstances[T] _
+  def findInstances1[T: TypeTag](classpath: ClassFileLookup[AbstractFile], p: String => Boolean) =
+    api.members.findInstances[T](classpath, p)(implicitly[TypeTag[T]])
 
-  def findInstances2[T: TypeTag] = api.members.findInstances2[T] _
+  def findInstances2[T: TypeTag](classpath: Seq[File], packageFilter: scala.util.matching.Regex,
+    verbose: Boolean = false) =
+      api.members.findInstances2[T](classpath, packageFilter, verbose)(implicitly[TypeTag[T]])
 
   implicit def imSeqToFormat[T: Show](values: Seq[T]): Format[T] = new Format[T](values, implicitly[Show[T]])
 
