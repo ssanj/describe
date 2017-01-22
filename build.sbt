@@ -35,5 +35,5 @@ scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
 
 scalacOptions in (Compile,doc) ++= Seq("-no-link-warnings")
 
-initialCommands := "import net.ssanj.describe._"
+initialCommands in (Compile, console) := "import net.ssanj.describe._"
 
