@@ -79,6 +79,20 @@ trait Members {
       classpath.filter(p => p.isFile && p.getName.endsWith(".jar")).flatMap(getClassesFromJarFile)
   }
 
+  def getPackageImplicits = getPackageAnything[MethodInfo](_.allImplicitMethods)
+
+  def getPackageMethods = getPackageAnything[MethodInfo](_.methods)
+
+  def getPackageAnything[T: Show](f: MemberInfo => Seq[T]): Seq[File] => scala.util.matching.Regex => Boolean => Seq[(MemberInfo, Seq[T])] =
+    classpath => packageFilter => verbose => {
+      val members = getPackageClasses(classpath, packageFilter, verbose)
+      val results = members.map(mi => scala.util.Try(f(mi)).map(t => mi -> t).getOrElse(mi -> Seq.empty[T]))
+      results.filterNot(_._2.isEmpty)
+    }
+
+  //TODO: Add search across packages for methods
+  //TODO: Handle `package`.type to get package object contents
+
   def findInstances2[T: TypeTag](classpath: Seq[File], packageFilter: scala.util.matching.Regex,
     verbose: Boolean): Seq[MemberInfo] =
     getPackageClasses(classpath, packageFilter, verbose).filter{ mi =>

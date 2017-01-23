@@ -88,5 +88,8 @@ How do we skip over any erroneous classes that break the package loading?
    Eg. scala package loading fails on a number of classes in tools, reflect and xml: getPackageClasses(classPath, "scala\\.(?!(reflect|tools|xml))".r)
 
 How can we selectively change the type of symbol for Member from type to class?
+ - No but we can get a Option[ClassInfo] from Member via 'asClass'
 
 Can we retrieve the classPath programmaticly instead of needing to switch to power mode?
+
+How can we see all implicits across a package?
