@@ -106,6 +106,12 @@ package object describe {
 
   implicit def imSeqToDefaults[T: Show : Ordering](values: Seq[T]): Defaults[T] = new Defaults[T](values)
 
+  implicit def imOrderingOfSeq[A : Ordering]: Ordering[Seq[A]] = new Ordering[Seq[A]] {
+    override def compare(t1: Seq[A], t2: Seq[A]): Int = {
+      t1.length - t2.length
+    }
+  }
+
   implicit def imSeqToSorted[T](values: Seq[T]): Sorted[T] = new Sorted[T](values)
 
   implicit def describeToReflectType(t: ru.Type): scala.reflect.runtime.universe.Type = t.asInstanceOf[scala.reflect.runtime.universe.Type]

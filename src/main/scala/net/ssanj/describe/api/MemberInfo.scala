@@ -70,6 +70,7 @@ trait Members {
         names.flatMap { n =>
           if (verbose) println(n)
           scala.util.Try{
+            //TODO: We need to also search through Modules here
             val cl = net.ssanj.describe.cm.staticClass(n)
             cl.typeSignature.toString //verify that the signature is valid
             cl.toType
@@ -83,7 +84,7 @@ trait Members {
 
   def getPackageMethods = getPackageAnything[MethodInfo](_.methods)
 
-  def getPackageAnything[T: Show](f: MemberInfo => Seq[T]): Seq[File] => scala.util.matching.Regex => Boolean => Seq[(MemberInfo, Seq[T])] =
+  def getPackageAnything[T](f: MemberInfo => Seq[T]): Seq[File] => scala.util.matching.Regex => Boolean => Seq[(MemberInfo, Seq[T])] =
     classpath => packageFilter => verbose => {
       val members = getPackageClasses(classpath, packageFilter, verbose)
       val results = members.map(mi => scala.util.Try(f(mi)).map(t => mi -> t).getOrElse(mi -> Seq.empty[T]))
