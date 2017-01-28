@@ -70,10 +70,24 @@ trait Members {
         names.flatMap { n =>
           if (verbose) println(n)
           scala.util.Try{
-            //TODO: We need to also search through Modules here
-            val cl = net.ssanj.describe.cm.staticClass(n)
-            cl.typeSignature.toString //verify that the signature is valid
-            cl.toType
+            if (n.endsWith("$")) { //module
+              //we use moduleSymbol here because:
+              //cm.staticClass seems to return a java object for a module
+              //which does not contain scala attributes like implicits etc.
+              //also cm.staticModule does not return any useful information. Only MODULE$
+              //alternatively, we can convert the class names to scala class names and
+              //use cm.staticModule: scala.Option$ -> scala.Option
+              // net.ssanj.describe.cm.moduleSymbol(Class.forName(n)).moduleClass.asClass.toType
+              val scalaModuleName = n.substring(0, n.length -1).replace("$", ".")
+              if (verbose) println(s"\t -> $scalaModuleName") else {}
+              val md = net.ssanj.describe.cm.staticModule(scalaModuleName)
+              md.typeSignature.toString //verify that the signature is valid
+              md.moduleClass.asClass.toType
+            } else { //class
+              val cl = net.ssanj.describe.cm.staticClass(n)
+              cl.typeSignature.toString //verify that the signature is valid
+              cl.toType
+            }
           }.map(MemberInfo(_)).toOption.toSeq }
       }
 
@@ -107,8 +121,4 @@ trait Members {
 
       withSpecificGen.orElse(withAnyGen).getOrElse(false)
     }
-
-
-
-
 }

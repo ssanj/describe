@@ -93,3 +93,19 @@ How can we selectively change the type of symbol for Member from type to class?
 Can we retrieve the classPath programmaticly instead of needing to switch to power mode?
 
 How can we see all implicits across a package?
+
+Why does cm.staticModule("object") does not return implicit markers?
+
+Eg. cm.staticModule("scala.Option$").moduleClass.asClass.toType.members.
+
+ - This seems to be linked to how java named classes ("scala.concurrent.ExecutionContext$Implicits$") are loaded via cm.staticClass. There are a couple of ways around this.
+  1. convert the java class name to a Scala one and use staticModule:
+    //remove last "$" and replace all others by "."
+    scala.concurrent.ExecutionContext$Implicits$ ->
+    val nm = scala.concurrent.ExecutionContext.Implicits
+    cm.staticModule(nm)
+  2. Load the class explicitly and then call moduleSymbol:
+    val cl = Class.forName("scala.concurrent.ExecutionContext$Implicits$")
+    cm.moduleSymbol(cl)
+
+Why are there duplicate classes listed in the packageClasses list?
