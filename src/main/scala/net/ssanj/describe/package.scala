@@ -95,8 +95,14 @@ package object describe {
   def getPackageClasses(classpath: Seq[File], packageFilter: scala.util.matching.Regex,
     verbose: Boolean = false) = api.members.getPackageClasses(classpath, packageFilter, verbose)
 
+  def getPackageImplicits(classpath: Seq[File], packageFilter: scala.util.matching.Regex,
+    verbose: Boolean = false) = api.members.getPackageImplicits(classpath, packageFilter, verbose)
+
+  def getPackageMethods(classpath: Seq[File], packageFilter: scala.util.matching.Regex,
+    verbose: Boolean = false) = api.members.getPackageMethods(classpath, packageFilter, verbose)
+
   def findInstances1[T: TypeTag](classpath: ClassFileLookup[AbstractFile], p: String => Boolean) =
-    api.members.findInstances[T](classpath, p)(implicitly[TypeTag[T]])
+    api.members.findInstances[T](classpath, p)
 
   def findInstances2[T: TypeTag](classpath: Seq[File], packageFilter: scala.util.matching.Regex,
     verbose: Boolean = false) =

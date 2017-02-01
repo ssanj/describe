@@ -354,3 +354,106 @@ which yields:
 var count : scala.Int
 var errors : java.lang.String
 ```
+
+## Package Summary - Experimental ##
+
+One of the neat features of describe is that it allows you to query members of a package. This is an experimental feature and may throw errors.
+
+
+### Listing classes in a package ###
+
+To list the members of a package use the ```getPackageClasses``` method.
+
+For example to list the classes of the ```scala.io``` package, use:
+
+```
+:pow //move to power mode
+getPackageClasses(classPath, "scala\\.io".r).d1
+```
+
+which returns:
+
+```
+ 1. scala.io.AnsiColor
+ 2. scala.io.AnsiColor
+ 3. scala.io.BufferedSource
+ 4. scala.io.BufferedSource$$anonfun$iter$1
+ 5. scala.io.BufferedSource$$anonfun$iter$1$$anonfun$apply$mcI$sp$1
+ 6. scala.io.BufferedSource$$anonfun$iter$2
+ 7. scala.io.BufferedSource$$anonfun$iter$3
+ 8. scala.io.BufferedSource$BufferedLineIterator
+ 9. scala.io.Codec
+10. scala.io.Codec
+11. scala.io.Codec$$anon$1
+12. scala.io.Codec$$anonfun$1
+13. scala.io.LowPriorityCodecImplicits
+14. scala.io.Position
+15. scala.io.Position
+16. scala.io.Source
+17. scala.io.Source
+18. scala.io.Source$$anon$1
+19. scala.io.Source$$anonfun$1
+20. scala.io.Source$$anonfun$2
+21. scala.io.Source$$anonfun$3
+22. scala.io.Source$$anonfun$fromFile$1
+23. scala.io.Source$$anonfun$fromFile$2
+24. scala.io.Source$$anonfun$fromIterable$1
+25. scala.io.Source$$anonfun$spaces$1
+26. scala.io.Source$LineIterator
+27. scala.io.Source$Positioner
+28. scala.io.StdIn
+29. scala.io.StdIn
+```
+
+filtering out anonymous instances:
+
+```
+getPackageClasses(classPath, "scala\\.io".r).filterNot(_.name.contains("$anon")).d1
+```
+
+we get:
+
+```
+ 1. scala.io.AnsiColor
+ 2. scala.io.AnsiColor
+ 3. scala.io.BufferedSource
+ 4. scala.io.BufferedSource$BufferedLineIterator
+ 5. scala.io.Codec
+ 6. scala.io.Codec
+ 7. scala.io.LowPriorityCodecImplicits
+ 8. scala.io.Position
+ 9. scala.io.Position
+10. scala.io.Source
+11. scala.io.Source
+12. scala.io.Source$LineIterator
+13. scala.io.Source$Positioner
+14. scala.io.StdIn
+15. scala.io.StdIn
+```
+
+_The duplicate type names indicate that there are both class and object types_.
+
+### Listing implicit methods in a package ###
+
+To list implicit methods within a package use ```getPackageImplicits```.
+
+For example to list implicit methods within the ```scala.io``` package use:
+
+```
+:pow //move to power mode
+getPackageImplicits(classPath, "scala\\.io".r, false).d1
+```
+
+which results in:
+
+```
+ 1. scala.io.BufferedSource:
+    implicit def codec: scala.io.Codec
+ 2. scala.io.Codec:
+    implicit def decoder2codec(cd: java.nio.charset.CharsetDecoder): scala.io.Codec
+    implicit def charset2codec(c: java.nio.charset.Charset): scala.io.Codec
+    implicit def string2codec(s: String): scala.io.Codec
+    implicit def fallbackSystemCodec: scala.io.Codec
+ 3. scala.io.LowPriorityCodecImplicits:
+    implicit def fallbackSystemCodec: scala.io.Codec
+```

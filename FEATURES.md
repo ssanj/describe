@@ -84,3 +84,13 @@ Features:
 15. All type-like classes should have all type-related functionality. (methods, classes, superclasses, subclasses) [x]
 
 16. MethodSignature should specify whether it is an implicit. [x]
+
+17. When listing MemberInfo signify which are objects and which are classes if possible.
+
+18. Make all package-level methods consistent: same parameters, same parameter groups.
+
+19. Support manifest entries.
+
+20. Support OSGI?
+
+21. Add without syntax to MemberInfo
