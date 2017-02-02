@@ -85,9 +85,9 @@ Features:
 
 16. MethodSignature should specify whether it is an implicit. [x]
 
-17. When listing MemberInfo signify which are objects and which are classes if possible.
+17. When listing MemberInfo signify which are objects and which are classes if possible. [x]
 
-18. Make all package-level methods consistent: same parameters, same parameter groups.
+18. Make all package-level methods consistent: same parameters, same parameter groups. [x]
 
 19. Support manifest entries.
 

@@ -13,8 +13,16 @@ object MemberInfo {
   implicit def toSymbolOpsFromMemberInfo(mi: MemberInfo): SymbolOps = toSymbolOps(mi.symbol)
 
   implicit val memberInfoShow: Show[MemberInfo] =
-    Show.create[MemberInfo](mi => s"${mi.fullName}")
-    // Show.create[MemberInfo](mi => scala.util.Try(s"${mi.fullName}").getOrElse(mi.resultType.toString))
+    Show.create[MemberInfo]{ mi =>
+      val traitFlag = mi.asClass.map(_.isTrait).getOrElse(false)
+      val moduleClassFlag = mi.isModuleClass
+      val isModuleClass = modifiers(moduleClassFlag, "[object]", prefix = false)
+      val isTrait = modifiers(traitFlag, "[trait]", prefix = false)
+      val isPackageClass = modifiers(mi.isPackageClass, "[package]", prefix = false)
+      val isClass = modifiers(!traitFlag && !moduleClassFlag, "[class]", prefix = false)
+      val isAbstract = modifiers(!traitFlag && mi.isAbstract, "[abstract]", prefix = false)
+      s"${mi.fullName}${isAbstract}${isModuleClass}${isTrait}${isClass}${isPackageClass}"
+    }
 
   import scala.math.Ordering
 

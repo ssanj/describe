@@ -374,35 +374,35 @@ getPackageClasses(classPath, "scala\\.io".r).d1
 which returns:
 
 ```
- 1. scala.io.AnsiColor
- 2. scala.io.AnsiColor
- 3. scala.io.BufferedSource
- 4. scala.io.BufferedSource$$anonfun$iter$1
- 5. scala.io.BufferedSource$$anonfun$iter$1$$anonfun$apply$mcI$sp$1
- 6. scala.io.BufferedSource$$anonfun$iter$2
- 7. scala.io.BufferedSource$$anonfun$iter$3
- 8. scala.io.BufferedSource$BufferedLineIterator
- 9. scala.io.Codec
-10. scala.io.Codec
-11. scala.io.Codec$$anon$1
-12. scala.io.Codec$$anonfun$1
-13. scala.io.LowPriorityCodecImplicits
-14. scala.io.Position
-15. scala.io.Position
-16. scala.io.Source
-17. scala.io.Source
-18. scala.io.Source$$anon$1
-19. scala.io.Source$$anonfun$1
-20. scala.io.Source$$anonfun$2
-21. scala.io.Source$$anonfun$3
-22. scala.io.Source$$anonfun$fromFile$1
-23. scala.io.Source$$anonfun$fromFile$2
-24. scala.io.Source$$anonfun$fromIterable$1
-25. scala.io.Source$$anonfun$spaces$1
-26. scala.io.Source$LineIterator
-27. scala.io.Source$Positioner
-28. scala.io.StdIn
-29. scala.io.StdIn
+ 1. scala.io.AnsiColor [object]
+ 2. scala.io.AnsiColor [trait]
+ 3. scala.io.BufferedSource [class]
+ 4. scala.io.BufferedSource$$anonfun$iter$1 [class]
+ 5. scala.io.BufferedSource$$anonfun$iter$1$$anonfun$apply$mcI$sp$1 [class]
+ 6. scala.io.BufferedSource$$anonfun$iter$2 [class]
+ 7. scala.io.BufferedSource$$anonfun$iter$3 [class]
+ 8. scala.io.BufferedSource$BufferedLineIterator [class]
+ 9. scala.io.Codec [class]
+10. scala.io.Codec [object]
+11. scala.io.Codec$$anon$1 [class]
+12. scala.io.Codec$$anonfun$1 [class]
+13. scala.io.LowPriorityCodecImplicits [trait]
+14. scala.io.Position [abstract] [class]
+15. scala.io.Position [object]
+16. scala.io.Source [abstract] [class]
+17. scala.io.Source [object]
+18. scala.io.Source$$anon$1 [class]
+19. scala.io.Source$$anonfun$1 [class]
+20. scala.io.Source$$anonfun$2 [class]
+21. scala.io.Source$$anonfun$3 [class]
+22. scala.io.Source$$anonfun$fromFile$1 [class]
+23. scala.io.Source$$anonfun$fromFile$2 [class]
+24. scala.io.Source$$anonfun$fromIterable$1 [class]
+25. scala.io.Source$$anonfun$spaces$1 [class]
+26. scala.io.Source$LineIterator [class]
+27. scala.io.Source$Positioner [class]
+28. scala.io.StdIn [object]
+29. scala.io.StdIn [trait]
 ```
 
 filtering out anonymous instances:
@@ -414,21 +414,21 @@ getPackageClasses(classPath, "scala\\.io".r).filterNot(_.name.contains("$anon"))
 we get:
 
 ```
- 1. scala.io.AnsiColor
- 2. scala.io.AnsiColor
- 3. scala.io.BufferedSource
- 4. scala.io.BufferedSource$BufferedLineIterator
- 5. scala.io.Codec
- 6. scala.io.Codec
- 7. scala.io.LowPriorityCodecImplicits
- 8. scala.io.Position
- 9. scala.io.Position
-10. scala.io.Source
-11. scala.io.Source
-12. scala.io.Source$LineIterator
-13. scala.io.Source$Positioner
-14. scala.io.StdIn
-15. scala.io.StdIn
+ 1. scala.io.AnsiColor [object]
+ 2. scala.io.AnsiColor [trait]
+ 3. scala.io.BufferedSource [class]
+ 4. scala.io.BufferedSource$BufferedLineIterator [class]
+ 5. scala.io.Codec [class]
+ 6. scala.io.Codec [object]
+ 7. scala.io.LowPriorityCodecImplicits [trait]
+ 8. scala.io.Position [abstract] [class]
+ 9. scala.io.Position [object]
+10. scala.io.Source [abstract] [class]
+11. scala.io.Source [object]
+12. scala.io.Source$LineIterator [class]
+13. scala.io.Source$Positioner [class]
+14. scala.io.StdIn [object]
+15. scala.io.StdIn [trait]
 ```
 
 _The duplicate type names indicate that there are both class and object types_.
@@ -447,13 +447,13 @@ getPackageImplicits(classPath, "scala\\.io".r, false).d1
 which results in:
 
 ```
- 1. scala.io.BufferedSource:
-    implicit def codec: scala.io.Codec
- 2. scala.io.Codec:
-    implicit def decoder2codec(cd: java.nio.charset.CharsetDecoder): scala.io.Codec
-    implicit def charset2codec(c: java.nio.charset.Charset): scala.io.Codec
-    implicit def string2codec(s: String): scala.io.Codec
-    implicit def fallbackSystemCodec: scala.io.Codec
- 3. scala.io.LowPriorityCodecImplicits:
-    implicit def fallbackSystemCodec: scala.io.Codec
+ 1. scala.io.BufferedSource [class]:
+  implicit def codec: scala.io.Codec
+ 2. scala.io.Codec [object]:
+  implicit def decoder2codec(cd: java.nio.charset.CharsetDecoder): scala.io.Codec
+  implicit def charset2codec(c: java.nio.charset.Charset): scala.io.Codec
+  implicit def string2codec(s: String): scala.io.Codec
+  implicit def fallbackSystemCodec: scala.io.Codec
+ 3. scala.io.LowPriorityCodecImplicits [trait]:
+  implicit def fallbackSystemCodec: scala.io.Codec
 ```

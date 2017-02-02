@@ -48,8 +48,10 @@ package object api extends ToSymbolOps
     ann.nonEmpty && ann.head.tree.tpe =:= deprecatedType
   }
 
-  private[api] def modifiers(b: Boolean, whenTrue: String, whenFalse: String = ""): String =
-      if (b) s"${whenTrue} " else whenFalse
+  private[api] def modifiers(b: Boolean, whenTrue: String, whenFalse: String = "", prefix: Boolean = true): String =
+      if (b) {
+        if (prefix) s"${whenTrue} " else s" ${whenTrue}"
+      } else whenFalse
 
   private[api] val rm = u.runtimeMirror(getClass.getClassLoader)
 
