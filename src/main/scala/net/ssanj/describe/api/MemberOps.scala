@@ -50,7 +50,7 @@ trait MemberOps {
 
   def methodsBy(f: MethodInfo => Boolean): Seq[MethodInfo] = methods.filter(f)
 
-  def methodsReturning[T: TypeTag]: Seq[MethodInfo] = methods.filter(_.returnType.finalResultType =:= typeOf[T])
+  def methodsReturning[T: TypeTag]: Seq[MethodInfo] = methods.filter(_.returnType.finalResultType.erasure =:= typeOf[T].erasure)
 
   def methodsReturningX[T: TypeTag]: Seq[MethodInfo] = methods.filter(_.returnType.finalResultType.erasure =:= typeOf[T].erasure)
 

@@ -109,3 +109,22 @@ Eg. cm.staticModule("scala.Option$").moduleClass.asClass.toType.members.
     cm.moduleSymbol(cl)
 
 Why are there duplicate classes listed in the packageClasses list?
+ - was using allImplicits which looks in both the class and moduleClass.
+
+Why are we seeing different results for Sublclasses on multiple runs?
+ api.members.getPackageSubclasses[DecodeJson[_]](classPath, "argonaut\\.".r, true).d1
+
+ First run:
+  1. argonaut.DecodeJson [trait]
+ Second run:
+  1. argonaut.CodecJson [trait]
+  1. argonaut.DecodeJson [trait]
+ Other runs:
+   1. argonaut.CodecJson [trait]
+   2. argonaut.CodecJson$$anon$1 [class]
+   3. argonaut.CodecJson$$anon$2 [class]
+   4. argonaut.DecodeJson [trait]
+   5. argonaut.DecodeJson$$anon$1 [class]
+   6. argonaut.DecodeJson$$anon$2 [class]
+   7. argonaut.DecodeJson$$anon$3 [class]
+   8. argonaut.DecodeJson$$anon$4 [class]

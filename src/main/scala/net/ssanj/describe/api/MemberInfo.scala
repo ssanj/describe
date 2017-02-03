@@ -106,6 +106,12 @@ trait Members {
 
   def getPackageMethods = getPackageAnything[MethodInfo](_.methods)
 
+  def getPackageSubclasses[T: TypeTag](classpath: Seq[File], packageFilter: scala.util.matching.Regex, verbose: Boolean): Seq[MemberInfo] = {
+    val targetType = typeOf[T].erasure
+    val members = getPackageClasses(classpath, packageFilter, verbose)
+    members.filter(_.resultType.erasure <:< targetType)
+  }
+
   def getPackageAnything[T](f: MemberInfo => Seq[T]): (Seq[File], scala.util.matching.Regex, Boolean) => Seq[(MemberInfo, Seq[T])] =
     (classpath, packageFilter, verbose) => {
       val members = getPackageClasses(classpath, packageFilter, verbose)

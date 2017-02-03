@@ -3,20 +3,20 @@
 Should provide quick access to the following for a type:
 
 1. methods
-  1. Allow searching by name, param types, flags and return types
-  1. Include implicit conversion methods?
-1. constructors
-  1. Allow searching by param types
-1. Classes
+  1. Allow searching by name, param types, flags and return types [x]
+  1. Include implicit conversion methods? [x]
+1. constructors [x]
+  1. Allow searching by param types [x]
+1. Classes [x]
 1. baseclasses [x]
 1. subclasses
 1. implicits (across the companion as well) [x]
 1. Final type
 1. Alias (if any)
-1. Modules
-1. Vals
-1. Vars
-1. Methods including those from implicit conversions
+1. Modules [x]
+1. Vals [x]
+1. Vars [x]
+1. Methods including those from implicit conversions [x]
 
 ----
 
@@ -24,6 +24,7 @@ Should provide quick access to the following for a type:
 2. Find package of a type (http://stackoverflow.com/questions/21428795/scala-reflection-derive-package-name) [x]
 3. reflective find a type that satisfies a relationship within a hierarchy/package (http://stackoverflow.com/questions/18247002/scala-reflection-search)
 4. Given a method name, return the class in which it is defined/overridden
+5. Find instances of a type within a package. Eg. JsonDecoder[_] within argonaut
 
 ----
 
@@ -94,3 +95,5 @@ Features:
 20. Support OSGI?
 
 21. Add without syntax to MemberInfo
+
+22. Allow methods: methodsReturning, methodsWithParam etc across a Seq[MethodInfo]
