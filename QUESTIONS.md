@@ -26,6 +26,8 @@ type.termSymbol
 What is a safe way to convert from Type to a TypeSymbol and TermSymbol.
 Option[TypeInfo] (ClassInfo, Module Info), Option[TermInfo] (ValInfo, VarInfo, MethodInfo)
 
+What is the difference between argonaut.CursorOp$class and argonaut.CursorOp$
+
 Do we need to override equals and hashCode to allow for proper comparisons? Eg. contains?
 
 Should we only list public entities?

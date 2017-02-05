@@ -1,6 +1,7 @@
 package net.ssanj.describe.api
 
 import scala.reflect.runtime.universe._
+import scala.util.{Failure, Success, Try}
 
 final case class MemberInfo(private val ttType: Type) {
   lazy val symbol = ttType.typeSymbol
@@ -59,6 +60,7 @@ trait Members {
     powerClassPath.asURLs.map{ m => new File(m.getFile) }
   }
 
+  //TODO: Consider using a Writer here for capturing the output.
   def getPackageClasses(classpath: Seq[File], packageFilter: scala.util.matching.Regex,
     verbose: Boolean): Seq[MemberInfo] = {
 
@@ -76,27 +78,48 @@ trait Members {
         }.filter(packageFilter.findFirstIn(_).isDefined).toSeq
 
         names.flatMap { n =>
-          if (verbose) println(n)
-          scala.util.Try{
-            if (n.endsWith("$")) { //module
-              //we use moduleSymbol here because:
-              //cm.staticClass seems to return a java object for a module
-              //which does not contain scala attributes like implicits etc.
-              //also cm.staticModule does not return any useful information. Only MODULE$
-              //alternatively, we can convert the class names to scala class names and
-              //use cm.staticModule: scala.Option$ -> scala.Option
-              // net.ssanj.describe.cm.moduleSymbol(Class.forName(n)).moduleClass.asClass.toType
-              val scalaModuleName = n.substring(0, n.length -1).replace("$", ".")
-              if (verbose) println(s"\t -> $scalaModuleName") else {}
-              val md = net.ssanj.describe.cm.staticModule(scalaModuleName)
-              md.typeSignature.toString //verify that the signature is valid
-              md.moduleClass.asClass.toType
+          if (verbose) println(n) else {}
+
+          val resolvedType: Try[Type] =
+            if (n.endsWith("$")) { //try to load as a scala module
+              getModuleType(n, verbose) orElse (getClassType(n))
             } else { //class
-              val cl = net.ssanj.describe.cm.staticClass(n)
-              cl.typeSignature.toString //verify that the signature is valid
-              cl.toType
+              getClassTypeHandlingErrors(n, verbose)
             }
-          }.map(MemberInfo(_)).toOption.toSeq }
+
+           resolvedType match {
+            case Success(t)  => Seq(MemberInfo(t))
+            case Failure(ex) =>
+              println(s"\t${ex.getMessage} - ${ex.getClass}")
+              Seq.empty[MemberInfo]
+          }
+        }
+      }
+
+      def getModuleType(name: String, verbose: Boolean): Try[Type] = Try {
+        //we use moduleSymbol here because:
+        //cm.staticClass seems to return a java object for a module
+        //which does not contain scala attributes like implicits etc.
+        //Alternatively, we can convert the class names to scala class names and
+        //use cm.staticModule: scala.Option$ -> scala.Option
+        // net.ssanj.describe.cm.moduleSymbol(Class.forName(n)).moduleClass.asClass.toType
+        val scalaModuleName = name.substring(0, name.length -1).replace("$", ".")
+        if (verbose) println(s"\t -> $scalaModuleName") else {}
+        val md = net.ssanj.describe.cm.staticModule(scalaModuleName)
+        md.typeSignature.toString //verify that the signature is valid
+        md.moduleClass.asClass.toType
+      }
+
+      def getClassTypeHandlingErrors(name: String, verbose: Boolean): Try[Type] = {
+        val className = if (name.endsWith("$class")) name.replace("$class", "") else name
+        if (verbose && name.endsWith("$class")) println(s"\t -> $className") else {}
+        getClassType(className)
+      }
+
+      def getClassType(className: String): Try[Type] = Try {
+        val cl = net.ssanj.describe.cm.staticClass(className)
+        cl.typeSignature.toString
+        cl.toType
       }
 
       classpath.filter(p => p.isFile && p.getName.endsWith(".jar")).flatMap(getClassesFromJarFile)
