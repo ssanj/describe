@@ -9,7 +9,6 @@ scalaVersion := "2.11.8"
 libraryDependencies ++= Seq(
   "org.scala-lang" %  "scala-reflect"  % "2.11.8",
   "org.scala-lang" %  "scala-compiler" % "2.11.8",
-  "org.clapper"    %% "classutil"      % "1.1.1",
   "org.scalatest"  %% "scalatest"      % "3.0.0"  % "test",
   "org.scalacheck" %% "scalacheck"     % "1.13.4" % "test"
 )

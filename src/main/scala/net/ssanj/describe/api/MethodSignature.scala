@@ -2,6 +2,7 @@ package net.ssanj.describe
 package api
 
 import scala.reflect.runtime.{universe => u}
+import scala.util.Try
 
 final case class MethodSignature(
   name         : String,
@@ -35,12 +36,13 @@ object MethodSignature {
   }
 
   private def formatReturnType(mi: MemberInfo): String = {
-    // val types =
-    //   if (mi.asClass.isEmpty) ""
-    //   else formatTypeParams(mi.asClass.toSeq.flatMap(_.typeParams))
+    Try(mi.resultType.toString).getOrElse {
+      val types =
+        if (mi.asClass.isEmpty) ""
+        else formatTypeParams(mi.asClass.toSeq.flatMap(_.typeParams))
 
-    // s"${mi.name}${types}"
-    mi.resultType.toString
+      s"${mi.name}${types}"
+    }
   }
 
   implicit val methodSignatureShow = Show.create[MethodSignature]{ ms =>

@@ -5,6 +5,10 @@ import scala.util.{Failure, Success, Try}
 
 final case class MemberInfo(private val ttType: Type) {
   lazy val symbol = ttType.typeSymbol
+
+  //override this to as not to throw an exception when ttType.toString,
+  //which is the default implementation, throws an Exception.
+  override def toString = symbol.fullName
 }
 
 object MemberInfo {
@@ -42,20 +46,6 @@ trait Members {
   import scala.tools.nsc.io.AbstractFile
   import java.io.File
 
-  def findInstances[T: TypeTag](classpath: ClassFileLookup[AbstractFile], p: String => Boolean): Seq[MemberInfo] = {
-    import org.clapper.classutil.ClassFinder
-    getTypeName(typeOf[T]).fold(Seq.empty[MemberInfo]) { name =>
-      val cf = ClassFinder(classpath.asURLs.collect{ case u if p(u.getFile) => new File(u.getFile) })
-      val impls = ClassFinder.concreteSubclasses(name, cf.getClasses).toList
-      impls.flatMap { ci =>
-        scala.util.Try {
-          val cs = net.ssanj.describe.cm.staticClass(ci.name)
-          MemberInfo(cs.toType)
-        }.toOption.toSeq
-      }
-    }
-  }
-
   def toCp(powerClassPath: ClassFileLookup[AbstractFile]): Seq[File] = {
     powerClassPath.asURLs.map{ m => new File(m.getFile) }
   }
@@ -77,22 +67,40 @@ trait Members {
             e.getName.replace("/", ".").replace(".class", "")
         }.filter(packageFilter.findFirstIn(_).isDefined).toSeq
 
-        names.flatMap { n =>
-          if (verbose) println(n) else {}
+        names.filterNot(_.contains("$anon")).zipWithIndex.flatMap {
+          case (n, i) =>
+            if (verbose) println("%03d. %s".format(i, n)) else {}
 
-          val resolvedType: Try[Type] =
-            if (n.endsWith("$")) { //try to load as a scala module
-              getModuleType(n, verbose) orElse (getClassType(n))
-            } else { //class
-              getClassTypeHandlingErrors(n, verbose)
+            val resolvedType: Try[Type] =
+              if (n.endsWith("$")) { //try to load as a scala module
+                getModuleType(n, verbose) orElse (getClassTypeOfModule(n, verbose))
+              } else { //class
+                getClassType(n)
+              }
+
+             resolvedType match {
+              case Success(t)  => Seq(MemberInfo(t))
+              case Failure(ex) =>
+                if(verbose) println(s"\t${getShortError(ex)}") else {}
+                Seq.empty[MemberInfo]
             }
+        }
+      }
 
-           resolvedType match {
-            case Success(t)  => Seq(MemberInfo(t))
-            case Failure(ex) =>
-              println(s"\t${ex.getMessage} - ${ex.getClass}")
-              Seq.empty[MemberInfo]
-          }
+      def getShortError(throwable: Throwable): String = {
+        val error = throwable.getMessage
+        val javaMirrorIndex = error.indexOf("in JavaMirror")
+        val lastSquareBraceIndex = error.lastIndexOf("]")
+
+        if (javaMirrorIndex != -1 &&
+            lastSquareBraceIndex != -1 &&
+            error.length >= (lastSquareBraceIndex + 1)) {
+              error.substring(0, javaMirrorIndex).trim +
+              " " +
+              error.substring(lastSquareBraceIndex + 1).trim +
+              s" - ${throwable.getClass}"
+        } else {
+          error
         }
       }
 
@@ -100,26 +108,22 @@ trait Members {
         //we use moduleSymbol here because:
         //cm.staticClass seems to return a java object for a module
         //which does not contain scala attributes like implicits etc.
-        //Alternatively, we can convert the class names to scala class names and
+        //We can convert the class names to scala class names and
         //use cm.staticModule: scala.Option$ -> scala.Option
         // net.ssanj.describe.cm.moduleSymbol(Class.forName(n)).moduleClass.asClass.toType
         val scalaModuleName = name.substring(0, name.length -1).replace("$", ".")
-        if (verbose) println(s"\t -> $scalaModuleName") else {}
+        if (verbose) println(s"\t -> loading as module: $scalaModuleName") else {}
         val md = net.ssanj.describe.cm.staticModule(scalaModuleName)
-        md.typeSignature.toString //verify that the signature is valid
         md.moduleClass.asClass.toType
       }
 
-      def getClassTypeHandlingErrors(name: String, verbose: Boolean): Try[Type] = {
-        val className = if (name.endsWith("$class")) name.replace("$class", "") else name
-        if (verbose && name.endsWith("$class")) println(s"\t -> $className") else {}
-        getClassType(className)
+      def getClassType(className: String): Try[Type] = Try {
+        net.ssanj.describe.cm.staticClass(className).toType
       }
 
-      def getClassType(className: String): Try[Type] = Try {
-        val cl = net.ssanj.describe.cm.staticClass(className)
-        cl.typeSignature.toString
-        cl.toType
+      def getClassTypeOfModule(className: String, verbos: Boolean): Try[Type] = {
+        if (verbose) println(s"\t -> loading as class: $className") else {}
+        getClassType(className)
       }
 
       classpath.filter(p => p.isFile && p.getName.endsWith(".jar")).flatMap(getClassesFromJarFile)
@@ -132,7 +136,7 @@ trait Members {
   def getPackageSubclasses[T: TypeTag](classpath: Seq[File], packageFilter: scala.util.matching.Regex, verbose: Boolean): Seq[MemberInfo] = {
     val targetType = typeOf[T].erasure
     val members = getPackageClasses(classpath, packageFilter, verbose)
-    members.filter(_.resultType.erasure <:< targetType)
+    members.filter(m => Try(m.resultType.erasure <:< targetType).toOption.fold(false)(identity))
   }
 
   def getPackageAnything[T](f: MemberInfo => Seq[T]): (Seq[File], scala.util.matching.Regex, Boolean) => Seq[(MemberInfo, Seq[T])] =
@@ -144,18 +148,4 @@ trait Members {
 
   //TODO: Add search across packages for methods
   //TODO: Handle `package`.type to get package object contents
-
-  def findInstances2[T: TypeTag](classpath: Seq[File], packageFilter: scala.util.matching.Regex,
-    verbose: Boolean): Seq[MemberInfo] =
-    getPackageClasses(classpath, packageFilter, verbose).filter{ mi =>
-      val withAnyGen = scala.util.Try {
-        !(mi.resultType.erasure =:= typeOf[T].erasure) && mi.resultType.erasure <:< typeOf[T].erasure
-      }
-
-      val withSpecificGen = scala.util.Try{
-        !(mi.resultType =:= typeOf[T]) && mi.resultType <:< typeOf[T]
-      }
-
-      withSpecificGen.orElse(withAnyGen).getOrElse(false)
-    }
 }

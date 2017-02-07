@@ -97,3 +97,5 @@ Features:
 21. Add without syntax to MemberInfo
 
 22. Allow methods: methodsReturning, methodsWithParam etc across a Seq[MethodInfo]
+
+23. Filter out $anon? https://github.com/scala/scala/blob/246653f024c13ba0348fec3f83b147de11251fe3/src/reflect/scala/reflect/internal/StdNames.scala

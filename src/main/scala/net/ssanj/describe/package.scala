@@ -8,8 +8,6 @@ package object describe {
 
   import scala.tools.nsc.interpreter.{StdReplVals, ISettings}
   import api.{Defaults, Format, Show, Sorted, Print}
-  import scala.tools.nsc.util.ClassFileLookup
-  import scala.tools.nsc.io.AbstractFile
 
 
   /** Sets the maximum output line length (in characters) for any repl output.
@@ -55,11 +53,6 @@ package object describe {
 
   def members[T: TypeTag](value: T) = api.members.info[T](value)
 
-  import scala.tools.nsc.util.ClassFileLookup
-  import scala.tools.nsc.io.AbstractFile
-
-  def findInstances[T: TypeTag](classpath: ClassFileLookup[AbstractFile], p: String => Boolean) = api.members.findInstances[T](classpath, p)
-
   def declaredOn[T: TypeTag] = api.members.info[T].declared
 
   def declaredOn[T: TypeTag](value: T) = api.members.info[T](value).declared
@@ -100,13 +93,6 @@ package object describe {
 
   def getPackageMethods(classpath: Seq[File], packageFilter: scala.util.matching.Regex,
     verbose: Boolean = false) = api.members.getPackageMethods(classpath, packageFilter, verbose)
-
-  def findInstances1[T: TypeTag](classpath: ClassFileLookup[AbstractFile], p: String => Boolean) =
-    api.members.findInstances[T](classpath, p)
-
-  def findInstances2[T: TypeTag](classpath: Seq[File], packageFilter: scala.util.matching.Regex,
-    verbose: Boolean = false) =
-      api.members.findInstances2[T](classpath, packageFilter, verbose)(implicitly[TypeTag[T]])
 
   implicit def imSeqToFormat[T: Show](values: Seq[T]): Format[T] = new Format[T](values, implicitly[Show[T]])
 
