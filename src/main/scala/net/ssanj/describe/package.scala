@@ -85,7 +85,7 @@ package object describe {
 
   implicit def toCp = api.members.toCp _
 
-  def getPackageClasses(classpath: Seq[File], packageFilter: scala.util.matching.Regex,
+  def pkgCls(classpath: Seq[File], packageFilter: scala.util.matching.Regex,
     verbose: Boolean = false) = api.members.getPackageClasses(classpath, packageFilter, verbose)
 
   def getPackageImplicits(classpath: Seq[File], packageFilter: scala.util.matching.Regex,

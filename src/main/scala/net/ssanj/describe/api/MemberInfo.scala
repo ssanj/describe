@@ -6,8 +6,7 @@ import scala.util.{Failure, Success, Try}
 final case class MemberInfo(private val ttType: Type) {
   lazy val symbol = ttType.typeSymbol
 
-  //override this to as not to throw an exception when ttType.toString,
-  //which is the default implementation, throws an Exception.
+  //override this to prevent ttType.toString throwing an Excepion in some instances.
   override def toString = symbol.fullName
 }
 
