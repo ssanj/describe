@@ -5,9 +5,9 @@ import scala.reflect.ClassTag
 
 trait MemberOps {
 
-  val members: MemberScope
+  val members: Seq[Symbol]
 
-  val decls: MemberScope
+  val decls: Seq[Symbol]
 
   lazy val methods = members.collect { case m: MethodSymbol => MethodInfo(m) }.toSeq
 

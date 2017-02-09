@@ -90,12 +90,58 @@ Features:
 
 18. Make all package-level methods consistent: same parameters, same parameter groups. [x]
 
-19. Support manifest entries.
+19. Support manifest entries. [not necessary as we get the cp from the REPL]
 
-20. Support OSGI?
+20. Support OSGI? [not necessary as we get the cp from the REPL]
 
 21. Add without syntax to MemberInfo
 
 22. Allow methods: methodsReturning, methodsWithParam etc across a Seq[MethodInfo]
 
-23. Filter out $anon? https://github.com/scala/scala/blob/246653f024c13ba0348fec3f83b147de11251fe3/src/reflect/scala/reflect/internal/StdNames.scala
+23. Filter out $anon? https://github.com/scala/scala/blob/246653f024c13ba0348fec3f83b147de11251fe3/src/reflect/scala/reflect/internal/StdNames.scala [x]
+
+24. Simple dsl for package paths:
+
+case class p(value: String)
+case class PackagePath(paths: p*) {
+    def *(value: p): PackagePath = PackagePath((paths ++ Array(value)):_*)
+}
+
+implicit def pToPackagePath(value: p): PackagePath = PackagePath(value)
+
+implicit def packagePathToReg(pp: PackagePath): scala.util.matching.Regex =
+    (pp.paths.map(_.value).mkString("\\.") + "\\.").r
+
+implicit def pToReg(path: p): scala.util.matching.Regex =
+    (path.value + "\\.").r
+
+    usage:
+      getPackageClasses(cp, p("scala") * p("io"), false)
+      getPackageClasses(cp, p("argonaut"), false)
+
+25. Shorten package methods with sensible defaults:
+
+  def pkgCls(cp: Seq[java.io.File] = classPath,verbose: Boolean = false, pkg: scala.util.matching.Regex) = getPackageClasses(cp, pkg, verbose)
+
+  usage:
+    pkgCls(pkg = p("scala") * p("io")).d1
+
+26. Return a log of the output and errors from package* methods.
+
+27. Add try/catch around looking up members.
+
+28. Which class has a variable named?
+    pkgClsWith(classPath, "scala\\.tools\\.nsc\\.".r)(Val, _.contains("classPath"))
+
+29. Replace Try with try/catch Linkage and others
+- api.members.getPackageSubclasses[scala.tools.nsc.backend.jvm.opt.ByteCodeRepository](classPath, "scala\\.tools\\.nsc\\.".r, false)
+
+30. Cache package classes. (The filters keep changing so it might be wasteful)
+
+31. Simplify (classPath, reg, verbose) usage. Allow defining once and reusing.
+
+ val ps = PackageSelector(classPath, "scala\\.tools\\.nsc\\.".r, false)
+
+ getPackageSubclasses[scala.tools.nsc.backend.jvm.opt.ByteCodeRepository](ps)
+
+ getPackageVals(ps)

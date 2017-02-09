@@ -2,6 +2,7 @@ package net.ssanj.describe
 
 import scala.reflect.runtime.{universe => u}
 import scala.util.Try
+import scala.util.control.NonFatal
 
 package object api extends ToSymbolOps
                    with    ToTermOps
@@ -60,6 +61,12 @@ package object api extends ToSymbolOps
       val S = implicitly[Show[T]]
       S.show(t1).compare(S.show(t2))
     }
+  }
+
+  private[api] def tryFold[T, U](block: => T)(success: T => U, failure: Throwable => U): U = try {
+    success(block)
+  } catch {
+    case ex@(NonFatal(_) | _: LinkageError | _: AssertionError) => failure(ex)
   }
 }
 

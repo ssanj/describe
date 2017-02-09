@@ -6,9 +6,9 @@ trait ToMemberOps {
 
   private[api] def toMemberOps(tpe: Type) = new MemberOps {
 
-    lazy val members = tpe.members
+    lazy val members = tryFold(tpe.members.toList)(identity, _ => Seq.empty[Symbol])
 
-    lazy val decls = tpe.decls
+    lazy val decls = tryFold(tpe.decls.toList)(identity, _ => Seq.empty[Symbol])
 
     lazy val asClass: Option[ClassInfo] = {
       getTypeSymbol(tpe).

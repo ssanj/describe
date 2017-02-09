@@ -132,16 +132,26 @@ trait Members {
 
   def getPackageMethods = getPackageAnything[MethodInfo](_.methods)
 
+  def getPackageVals = getPackageAnything[ValInfo](_.vals)
+
+  def getPackageVars = getPackageAnything[VarInfo](_.vars)
+
+  def findPackageVals(f: (MemberInfo, Seq[ValInfo]) => Boolean)(
+    classpath: Seq[File], packageFilter: scala.util.matching.Regex, verbose:Boolean):
+      Seq[(MemberInfo, Seq[ValInfo])] =
+      getPackageVals(classpath, packageFilter, verbose).filter(x => f(x._1, x._2))
+
   def getPackageSubclasses[T: TypeTag](classpath: Seq[File], packageFilter: scala.util.matching.Regex, verbose: Boolean): Seq[MemberInfo] = {
     val targetType = typeOf[T].erasure
     val members = getPackageClasses(classpath, packageFilter, verbose)
-    members.filter(m => Try(m.resultType.erasure <:< targetType).toOption.fold(false)(identity))
+    // members.filter(m => Try(m.resultType.erasure <:< targetType).toOption.fold(false)(identity))
+    members.filter(m => tryFold(m.resultType.erasure <:< targetType)(identity, _ => false))
   }
 
   def getPackageAnything[T](f: MemberInfo => Seq[T]): (Seq[File], scala.util.matching.Regex, Boolean) => Seq[(MemberInfo, Seq[T])] =
     (classpath, packageFilter, verbose) => {
       val members = getPackageClasses(classpath, packageFilter, verbose)
-      val results = members.map(mi => scala.util.Try(f(mi)).map(t => mi -> t).getOrElse(mi -> Seq.empty[T]))
+      val results = members.map(mi => tryFold(f(mi))(t => mi -> t, _ => mi -> Seq.empty[T]))
       results.filterNot(_._2.isEmpty)
     }
 
