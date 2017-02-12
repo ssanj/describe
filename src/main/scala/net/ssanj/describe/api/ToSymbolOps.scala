@@ -8,7 +8,7 @@ trait ToSymbolOps {
 
     val name: String                      = getName(symbol)
 
-    val fullName: String                  = symbol.fullName
+    val fullName: String                  = symbol.fullName.trim
 
     val typeSignature: MemberInfo         = MemberInfo(symbol.typeSignature)
 

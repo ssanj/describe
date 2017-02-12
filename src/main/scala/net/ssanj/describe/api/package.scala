@@ -17,7 +17,7 @@ package object api extends ToSymbolOps
   object members extends api.Members
 
   private[api] def getName(symbol: u.Symbol): String =
-    s"${symbol.name.decodedName.toString}"
+    s"${symbol.name.decodedName.toString}".trim
 
   private[api] def getOwnerName(symbol: u.Symbol): Option[String] =
     Try(symbol.owner).toOption.map(getName)

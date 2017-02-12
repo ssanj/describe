@@ -87,14 +87,17 @@ package object describe {
 
   implicit def toCp = api.members.toCp _
 
-  def pkgCls(classpath: Seq[File], packageFilter: scala.util.matching.Regex,
+  def pkgClasses(classpath: Seq[File], packageFilter: scala.util.matching.Regex,
     verbose: Boolean = false) = api.members.getPackageClasses(classpath, packageFilter, verbose)
 
-  def getPackageImplicits(classpath: Seq[File], packageFilter: scala.util.matching.Regex,
+  def pkgImplicits(classpath: Seq[File], packageFilter: scala.util.matching.Regex,
     verbose: Boolean = false) = api.members.getPackageImplicits(classpath, packageFilter, verbose)
 
-  def getPackageMethods(classpath: Seq[File], packageFilter: scala.util.matching.Regex,
-    verbose: Boolean = false) = api.members.getPackageMethods(classpath, packageFilter, verbose)
+  def pkgVals_?(f: api.ValInfo => Boolean)(
+    classpath: Seq[File], packageFilter: scala.util.matching.Regex, verbose: Boolean = false) =
+    api.members.findPackageVals(f)(classpath, packageFilter, verbose)
+
+  def pkg_*[T](f: api.MemberInfo => Seq[T]) = api.members.getPackageAnything[T](f)
 
   implicit def imSeqToFormat[T: Show](values: Seq[T]): Format[T] = new Format[T](values, implicitly[Show[T]])
 

@@ -99,21 +99,14 @@ trait Members {
 
   def getPackageImplicits = getPackageAnything[MethodInfo](_.implicitMethods)
 
-  def getPackageMethods = getPackageAnything[MethodInfo](_.methods)
-
-  def getPackageVals = getPackageAnything[ValInfo](_.vals)
-
-  def getPackageVars = getPackageAnything[VarInfo](_.vars)
-
-  def findPackageVals(f: PackageElement[ValInfo] => Boolean)(
+  def findPackageVals(f: ValInfo => Boolean)(
     classpath: Seq[File], packageFilter: scala.util.matching.Regex, verbose:Boolean):
       Seq[PackageElement[ValInfo]] =
-        getPackageVals(classpath, packageFilter, verbose).filter(f)
+        getPackageAnything[ValInfo](_.vals)(classpath, packageFilter, verbose).filter(pe => pe.elements.exists(f))
 
   def getPackageSubclasses[T: TypeTag](classpath: Seq[File], packageFilter: scala.util.matching.Regex, verbose: Boolean): Seq[MemberInfo] = {
     val targetType = typeOf[T].erasure
     val members = getPackageClasses(classpath, packageFilter, verbose)
-    // members.filter(m => Try(m.resultType.erasure <:< targetType).toOption.fold(false)(identity))
     members.filter(m => tryFold(m.resultType.erasure <:< targetType)(identity, _ => false))
   }
 
