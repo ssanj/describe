@@ -119,7 +119,7 @@ implicit def pToReg(path: p): scala.util.matching.Regex =
       getPackageClasses(cp, p("scala") * p("io"), false)
       getPackageClasses(cp, p("argonaut"), false)
 
-25. Shorten package methods with sensible defaults:
+25. Shorten package methods with sensible defaults: [x]
 
   def pkgCls(cp: Seq[java.io.File] = classPath,verbose: Boolean = false, pkg: scala.util.matching.Regex) = getPackageClasses(cp, pkg, verbose)
 
@@ -128,17 +128,17 @@ implicit def pToReg(path: p): scala.util.matching.Regex =
 
 26. Return a log of the output and errors from package* methods.
 
-27. Add try/catch around looking up members.
+27. Add try/catch around looking up members. [x]
 
 28. Which class has a variable named?
-    pkgClsWith(classPath, "scala\\.tools\\.nsc\\.".r)(Val, _.contains("classPath"))
+    pkgClsWith(classPath, "scala\\.tools\\.nsc\\.".r)(Val, _.contains("classPath")) [x]
 
 29. Replace Try with try/catch Linkage and others
-- api.members.getPackageSubclasses[scala.tools.nsc.backend.jvm.opt.ByteCodeRepository](classPath, "scala\\.tools\\.nsc\\.".r, false)
+- api.members.getPackageSubclasses[scala.tools.nsc.backend.jvm.opt.ByteCodeRepository](classPath, "scala\\.tools\\.nsc\\.".r, false) [x]
 
 30. Cache package classes. (The filters keep changing so it might be wasteful)
 
-31. Simplify (classPath, reg, verbose) usage. Allow defining once and reusing.
+31. Simplify (classPath, reg, verbose) usage. Allow defining once and reusing. [x]
 
  val ps = PackageSelector(classPath, "scala\\.tools\\.nsc\\.".r, false)
 

@@ -2,7 +2,6 @@ package net.ssanj
 
 import scala.reflect.runtime.universe.TypeTag
 import scala.language.implicitConversions
-import java.io.File
 
 package object describe {
 
@@ -87,17 +86,17 @@ package object describe {
 
   implicit def toCp = api.members.toCp _
 
-  def pkgClasses(classpath: Seq[File], packageFilter: scala.util.matching.Regex,
-    verbose: Boolean = false) = api.members.getPackageClasses(classpath, packageFilter, verbose)
+  def pkgClasses(implicit ps: api.members.PackageSelect) =
+    api.members.getPackageClasses(ps)
 
-  def pkgImplicits(classpath: Seq[File], packageFilter: scala.util.matching.Regex,
-    verbose: Boolean = false) = api.members.getPackageImplicits(classpath, packageFilter, verbose)
+  def pkgImplicits(implicit ps: api.members.PackageSelect) =
+    api.members.getPackageImplicits(ps)
 
-  def pkgVals_?(f: api.ValInfo => Boolean)(
-    classpath: Seq[File], packageFilter: scala.util.matching.Regex, verbose: Boolean = false) =
-    api.members.findPackageVals(f)(classpath, packageFilter, verbose)
+  def pkgVals_?(f: api.ValInfo => Boolean)(implicit ps: api.members.PackageSelect) =
+    api.members.findPackageVals(f)(ps)
 
-  def pkg_*[T](f: api.MemberInfo => Seq[T]) = api.members.getPackageAnything[T](f)
+  def pkg_*[T](f: api.MemberInfo => Seq[T])(implicit ps: api.members.PackageSelect) =
+    api.members.getPackageAnything[T](f)(ps)
 
   implicit def imSeqToFormat[T: Show](values: Seq[T]): Format[T] = new Format[T](values, implicitly[Show[T]])
 

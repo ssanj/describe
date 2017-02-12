@@ -18,9 +18,16 @@ trait Members {
     powerClassPath.asURLs.map{ m => new File(m.getFile) }
   }
 
+  case class PackageSelect(classpath: Seq[File], packageFilter: scala.util.matching.Regex,
+    verbose: Boolean)
+
+  object PackageSelect {
+    def apply(classpath: Seq[File], packageFilter: scala.util.matching.Regex): PackageSelect =
+      PackageSelect(classpath, packageFilter, false)
+  }
+
   //TODO: Consider using a Writer here for capturing the output.
-  def getPackageClasses(classpath: Seq[File], packageFilter: scala.util.matching.Regex,
-    verbose: Boolean): Seq[MemberInfo] = {
+  def getPackageClasses(ps: PackageSelect): Seq[MemberInfo] = {
 
       import java.util.jar.JarFile
       import java.util.jar.JarEntry
@@ -33,15 +40,15 @@ trait Members {
         val names = entries.collect {
           case e if e.getName.endsWith(".class") =>
             e.getName.replace("/", ".").replace(".class", "")
-        }.filter(packageFilter.findFirstIn(_).isDefined).toSeq
+        }.filter(ps.packageFilter.findFirstIn(_).isDefined).toSeq
 
         names.filterNot(_.contains("$anon")).zipWithIndex.flatMap {
           case (n, i) =>
-            if (verbose) println("%03d. %s".format(i, n)) else {}
+            if (ps.verbose) println("%03d. %s".format(i, n)) else {}
 
             val resolvedType: Try[Type] =
               if (n.endsWith("$")) { //try to load as a scala module
-                getModuleType(n, verbose) orElse (getClassTypeOfModule(n, verbose))
+                getModuleType(n, ps.verbose) orElse (getClassTypeOfModule(n, ps.verbose))
               } else { //class
                 getClassType(n)
               }
@@ -49,7 +56,7 @@ trait Members {
              resolvedType match {
               case Success(t)  => Seq(MemberInfo(t))
               case Failure(ex) =>
-                if(verbose) println(s"\t${getShortError(ex)}") else {}
+                if(ps.verbose) println(s"\t${getShortError(ex)}") else {}
                 Seq.empty[MemberInfo]
             }
         }
@@ -89,34 +96,32 @@ trait Members {
         net.ssanj.describe.cm.staticClass(className).toType
       }
 
-      def getClassTypeOfModule(className: String, verbos: Boolean): Try[Type] = {
+      def getClassTypeOfModule(className: String, verbose: Boolean): Try[Type] = {
         if (verbose) println(s"\t -> loading as class: $className") else {}
         getClassType(className)
       }
 
-      classpath.filter(p => p.isFile && p.getName.endsWith(".jar")).flatMap(getClassesFromJarFile)
+      ps.classpath.filter(p => p.isFile && p.getName.endsWith(".jar")).flatMap(getClassesFromJarFile)
   }
 
   def getPackageImplicits = getPackageAnything[MethodInfo](_.implicitMethods)
 
-  def findPackageVals(f: ValInfo => Boolean)(
-    classpath: Seq[File], packageFilter: scala.util.matching.Regex, verbose:Boolean):
+  def findPackageVals(f: ValInfo => Boolean)(ps: PackageSelect):
       Seq[PackageElement[ValInfo]] =
-        getPackageAnything[ValInfo](_.vals)(classpath, packageFilter, verbose).filter(pe => pe.elements.exists(f))
+        getPackageAnything[ValInfo](_.vals)(ps).filter(pe => pe.elements.exists(f))
 
-  def getPackageSubclasses[T: TypeTag](classpath: Seq[File], packageFilter: scala.util.matching.Regex, verbose: Boolean): Seq[MemberInfo] = {
+  def getPackageSubclasses[T: TypeTag](ps: PackageSelect): Seq[MemberInfo] = {
     val targetType = typeOf[T].erasure
-    val members = getPackageClasses(classpath, packageFilter, verbose)
+    val members = getPackageClasses(ps)
     members.filter(m => tryFold(m.resultType.erasure <:< targetType)(identity, _ => false))
   }
 
-  def getPackageAnything[T](f: MemberInfo => Seq[T]): (Seq[File], scala.util.matching.Regex, Boolean) => Seq[PackageElement[T]] =
-    (classpath, packageFilter, verbose) => {
-      val members = getPackageClasses(classpath, packageFilter, verbose)
+  def getPackageAnything[T](f: MemberInfo => Seq[T]): PackageSelect => Seq[PackageElement[T]] =
+    ps => {
+      val members = getPackageClasses(ps)
       val results = members.map(mi => tryFold(f(mi))(t => mi -> t, _ => mi -> Seq.empty[T]))
       results.filterNot(_._2.isEmpty).map(t => PackageElement[T](t._1, t._2))
     }
 
-  //TODO: Add search across packages for methods
   //TODO: Handle `package`.type to get package object contents
 }
