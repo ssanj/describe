@@ -33,12 +33,4 @@ object Show extends LowPriorityShowImplicits {
       Try(s"${value.getClass} - [ex.getMessage]") getOrElse ("???")
     }
   }
-
-  implicit def fromSeq[T](implicit S: Show[T]): Show[Seq[T]] = {
-    Show.create[Seq[T]](_.map(v => s"\t${S.show(v)}").mkString("\n"))
-  }
-
-  implicit def fromPair[A, B](implicit SA: Show[A], SB: Show[B]): Show[(A, B)] = {
-    Show.create[(A, B)](t => s"${SA.show(t._1)}:\n${SB.show(t._2)}")
-  }
 }

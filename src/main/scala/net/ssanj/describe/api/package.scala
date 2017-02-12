@@ -63,6 +63,12 @@ package object api extends ToSymbolOps
     }
   }
 
+  private[api] def contraOrdering[T, U: Ordering](f: T => U) = new Ordering[T] {
+    override def compare(t1: T, t2: T): Int = {
+      implicitly[Ordering[U]].compare(f(t1), f(t2))
+    }
+  }
+
   private[api] def tryFold[T, U](block: => T)(success: T => U, failure: Throwable => U): U = try {
     success(block)
   } catch {
