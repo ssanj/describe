@@ -25,7 +25,8 @@ scalacOptions ++= Seq(
                       "-Ywarn-infer-any",
                       "-Ywarn-nullary-override",
                       "-Ywarn-nullary-unit",
-                      "-language:implicitConversions"
+                      "-language:implicitConversions",
+                      "-language:higherKinds"
                      )
 
 scalacOptions in (Compile, console) ~= (_ filterNot (Seq("-Ywarn-unused-import", "-Xfatal-warnings").contains(_)))

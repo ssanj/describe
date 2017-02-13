@@ -86,6 +86,10 @@ package object describe {
 
   implicit def toCp = api.members.toCp _
 
+  lazy val PackageSelect = api.members.PackageSelect
+
+  type PackageSelect = api.members.PackageSelect
+
   def pkgClasses(implicit ps: api.members.PackageSelect) =
     api.members.getPackageClasses(ps)
 
@@ -107,5 +111,13 @@ package object describe {
   implicit def describeToReflectType(t: ru.Type): scala.reflect.runtime.universe.Type = t.asInstanceOf[scala.reflect.runtime.universe.Type]
 
   implicit def stringtToPrint(value: String): Print = new Print(value)
+
+  implicit def packageElementToTransform[T](values: api.PackageElement[T]):
+    api.Transform[api.PackageElement, T] = new api.Transform[api.PackageElement, T](values)
+
+  implicit val seqFunctor: api.Functor[Seq] = new api.Functor[Seq] {
+    def map[A, B](fa: Seq[A], f: A => B): Seq[B] = fa map f
+  }
+
 }
 

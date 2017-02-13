@@ -12,4 +12,9 @@ object PackageElement {
       }
 
   implicit def packageElementOrdering[T] = contraOrdering[PackageElement[T], MemberInfo](_.mi)
+
+  implicit val packageElementFunctor = new Functor[PackageElement] {
+    def map[A, B](fa: PackageElement[A], f: A => B): PackageElement[B] =
+      fa.copy(elements = fa.elements map f)
+  }
 }

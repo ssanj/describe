@@ -74,5 +74,7 @@ package object api extends ToSymbolOps
   } catch {
     case ex@(NonFatal(_) | _: LinkageError | _: AssertionError) => failure(ex)
   }
+
+  type Identity[T] = T
 }
 

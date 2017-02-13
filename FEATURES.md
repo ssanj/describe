@@ -145,3 +145,5 @@ implicit def pToReg(path: p): scala.util.matching.Regex =
  getPackageSubclasses[scala.tools.nsc.backend.jvm.opt.ByteCodeRepository](ps)
 
  getPackageVals(ps)
+
+ 32. Allow transforming on a Seq[PackageSelect]

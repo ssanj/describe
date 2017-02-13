@@ -15,8 +15,8 @@ object MethodInfo {
 
   implicit def toMethodOpsFromMethodInfo(methodInfo: MethodInfo) = toMethodOps(methodInfo.ms)
 
-  implicit def toTransformFromMethodInfo(values: Seq[MethodInfo]): Transform[MethodInfo] =
-    new Transform[MethodInfo](values)
+  implicit def toTransformFromMethodInfo(values: Seq[MethodInfo]): Transform[Seq, MethodInfo] =
+    new Transform[Seq, MethodInfo](values)
 
   implicit def toMethodSignatureFromMethodInfo(mi: MethodInfo) = toMethodSignatureOps(mi)
 

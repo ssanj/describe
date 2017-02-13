@@ -2,12 +2,12 @@ package net.ssanj.describe
 package api
 package show
 
-final case class MethodNameShow(value: MethodInfo)
+final case class MethodName(value: MethodInfo)
 
-object MethodNameShow {
-  implicit val methodNameShow = Show.create[MethodNameShow](_.value.name)
+object MethodName {
+  implicit val methodNameShow = Show.create[MethodName](_.value.name)
 
-  implicit val methodNameShowOrdering =  new Ordering[MethodNameShow] {
-    override def compare(m1: MethodNameShow, m2: MethodNameShow): Int = m1.value.name compare m2.value.name
+  implicit val methodNameShowOrdering = new Ordering[MethodName] {
+    override def compare(m1: MethodName, m2: MethodName): Int = m1.value.name compare m2.value.name
   }
 }
