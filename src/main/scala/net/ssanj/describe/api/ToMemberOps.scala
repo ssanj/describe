@@ -19,6 +19,14 @@ trait ToMemberOps {
 
     lazy val resultType = tpe.resultType
 
+    lazy val constructors: Seq[MethodInfo] = {
+      val mi = MemberInfo(tpe)
+      methods.filter { m =>
+        (m.isConstructor && !m.returnType.isModuleClass && m.name != "$init$") ||
+        (mi.isModuleClass && m.name == "apply")
+      }
+    }
+
     lazy val companion: Option[MemberInfo] = {
       val comp = tpe.erasure.companion
       if (comp == NoType) None else Option(MemberInfo(comp))

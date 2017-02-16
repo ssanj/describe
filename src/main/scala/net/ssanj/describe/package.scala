@@ -96,6 +96,12 @@ package object describe {
   def pkgImplicits(implicit ps: api.members.PackageSelect) =
     api.members.getPackageImplicits(ps)
 
+  def pkgExtractors(implicit ps: api.members.PackageSelect) =
+    api.members.getPackageExtractors(ps)
+
+  def pkgConstructors(implicit ps: api.members.PackageSelect) =
+    api.members.getPackageConstructors(ps)
+
   def pkgVals_?(f: api.ValInfo => Boolean)(implicit ps: api.members.PackageSelect) =
     api.members.findPackageVals(f)(ps)
 
@@ -118,6 +124,5 @@ package object describe {
   implicit val seqFunctor: api.Functor[Seq] = new api.Functor[Seq] {
     def map[A, B](fa: Seq[A], f: A => B): Seq[B] = fa map f
   }
-
 }
 

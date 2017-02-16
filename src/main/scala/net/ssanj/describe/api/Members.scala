@@ -106,6 +106,10 @@ trait Members {
 
   def getPackageImplicits = getPackageAnything[MethodInfo](_.implicitMethods)
 
+  def getPackageExtractors = getPackageAnything[MethodInfo](_.extractors)
+
+  def getPackageConstructors = getPackageAnything[MethodInfo](_.constructors)
+
   def findPackageVals(f: ValInfo => Boolean)(ps: PackageSelect):
       Seq[PackageElement[ValInfo]] =
         getPackageAnything[ValInfo](_.vals)(ps).filter(pe => pe.elements.exists(f))

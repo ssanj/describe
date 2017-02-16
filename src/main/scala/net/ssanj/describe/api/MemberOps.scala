@@ -73,7 +73,9 @@ trait MemberOps {
     hasHOReturnType(m.returnType) || parameters.exists(hasHOParam)
   }
 
-  lazy val constructors: Seq[MethodInfo] = methods.filter(_.isConstructor)
+  val constructors: Seq[MethodInfo]
+
+  lazy val extractors: Seq[MethodInfo] = methods.filter(m => m.name == "unapply" || m.name == "unapplySeq")
 
   lazy val implicitMethods: Seq[MethodInfo] = methods.filter(_.isImplicit)
 

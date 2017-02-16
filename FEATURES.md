@@ -146,4 +146,25 @@ implicit def pToReg(path: p): scala.util.matching.Regex =
 
  getPackageVals(ps)
 
- 32. Allow transforming on a Seq[PackageSelect]
+ 32. Allow transforming on a Seq[PackageSelect[A]] with a A => B
+
+ 33. Add a summarize method which will write out a summary of a type:
+  - superclasses
+  - constructors
+  - extractors
+  - methods
+  - vals
+  - vars
+  - subclasses
+
+34. Add support to find typeClass instances.
+
+35. Add pkgExtractors [x]
+
+36. Add [extractor] marker to methods [x]
+
+37. Remove object "constructor" from pkgConstructors list [x]
+
+38. Remove object "constructor" from method list
+
+39. Add apply methods of ModuleClasses to "constructor" list
