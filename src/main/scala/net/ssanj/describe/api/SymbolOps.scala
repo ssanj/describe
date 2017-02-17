@@ -5,7 +5,7 @@ trait SymbolOps {
   val fullName: String
   val typeSignature: MemberInfo
   // val overrides: ???
-  // val owner: ???
+  val ownerType: Option[MemberInfo]
   // val pos
   val isModule: Boolean
   val isType: Boolean

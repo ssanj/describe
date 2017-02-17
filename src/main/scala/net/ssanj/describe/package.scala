@@ -121,6 +121,10 @@ package object describe {
   implicit def packageElementToTransform[T](values: api.PackageElement[T]):
     api.Transform[api.PackageElement, T] = new api.Transform[api.PackageElement, T](values)
 
+  // implicit def nestedFunctor[S[_[_]], T[_]](implicit FS: api.Functor[S], FT: api.Functor[T]): api.Functor[({type X[Z]=S[T[Z]]})#X] = new api.Functor[({type X[Z]=S[T[Z]]})#X] {
+  //   def map[A, B](fa: S[T[A]], f: A => B): S[T[B]] = FS.map(fa, FT.map(_: T[A], f))
+  // }
+
   implicit val seqFunctor: api.Functor[Seq] = new api.Functor[Seq] {
     def map[A, B](fa: Seq[A], f: A => B): Seq[B] = fa map f
   }

@@ -167,4 +167,4 @@ implicit def pToReg(path: p): scala.util.matching.Regex =
 
 38. Remove object "constructor" from method list
 
-39. Add apply methods of ModuleClasses to "constructor" list
+39. Add apply methods of ModuleClasses to "constructor" list [x]

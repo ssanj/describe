@@ -9,6 +9,7 @@ trait ToMethodSignaureOps {
     lazy val methodSignature: MethodSignature = {
       val isConstructor = mi.name == u.termNames.CONSTRUCTOR.decodedName.toString
       MethodSignature(
+        owner      = mi.ownerType,
         name       =
           //match on name instead of mi.isConstructor to prevent matching $init$ as well.
           if (isConstructor) getOwnerName(mi.symbol).getOrElse(mi.name)

@@ -1,6 +1,7 @@
 package net.ssanj.describe.api
 
 import scala.reflect.runtime.universe.Symbol
+import scala.util.Try
 
 trait ToSymbolOps {
 
@@ -61,5 +62,8 @@ trait ToSymbolOps {
     val isSynthetic: Boolean              = symbol.isSynthetic
 
     val isTerm: Boolean                   = symbol.isTerm
+
+    val ownerType: Option[MemberInfo]     =
+        Try(MemberInfo(symbol.owner.asType.toType)).toOption
   }
 }

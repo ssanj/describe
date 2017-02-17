@@ -5,6 +5,7 @@ import scala.reflect.runtime.{universe => u}
 import scala.util.Try
 
 final case class MethodSignature(
+  owner        : Option[MemberInfo],
   name         : String,
   typeParams   : Seq[MemberInfo],
   paramLists   : List[List[ParamInfo]],
@@ -50,7 +51,13 @@ object MethodSignature {
     val params     = formatParams(ms.paramLists)
     val returnType = formatReturnType(ms.returnType)
     val dep        = modifiers(isDeprecated(ms.symbol), "[deprecated]")
-    val constr     = modifiers(ms.isConstructor, "[constructor]")
+    val isModClass = ms.owner.map(_.isModuleClass).getOrElse(false)
+    val constr     =
+      modifiers(
+        ms.isConstructor ||
+        isModClass && ms.name == "apply",
+        "[constructor]"
+      )
     val extr       = modifiers(ms.name == "unapply" || ms.name == "unapply", "[extractor]")
     val isImplicit = modifiers(ms.symbol.isImplicit, "implicit")
 
