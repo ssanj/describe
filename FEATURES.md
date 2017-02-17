@@ -146,7 +146,7 @@ implicit def pToReg(path: p): scala.util.matching.Regex =
 
  getPackageVals(ps)
 
- 32. Allow transforming on a Seq[PackageSelect[A]] with a A => B
+ 32. Allow transforming on a Seq[PackageSelect[A]] with a A => B [x]
 
  33. Add a summarize method which will write out a summary of a type:
   - superclasses
