@@ -96,6 +96,10 @@ package object describe {
   def pkgImplicits(implicit ps: api.members.PackageSelect) =
     api.members.getPackageImplicits(ps)
 
+  //pkgSubclasses[T](implicitly, ps)
+  def pkgSubclasses[T: TypeTag](implicit ps: api.members.PackageSelect) =
+    api.members.getPackageSubclasses[T](ps)
+
   def pkgExtractors(implicit ps: api.members.PackageSelect) =
     api.members.getPackageExtractors(ps)
 

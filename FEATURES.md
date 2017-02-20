@@ -158,6 +158,8 @@ implicit def pToReg(path: p): scala.util.matching.Regex =
   - subclasses
 
 34. Add support to find typeClass instances.
+  - implicits methods for the type
+  - implicit vals for the type
 
 35. Add pkgExtractors [x]
 
@@ -168,3 +170,11 @@ implicit def pToReg(path: p): scala.util.matching.Regex =
 38. Remove object "constructor" from method list
 
 39. Add apply methods of ModuleClasses to "constructor" list [x]
+
+40. Add Show instance for types only (leave out param names).
+
+  Eg. map => map[A,B](A => B): B
+
+41. Show subclasses for a type
+    - get superclasses for each type
+    - check for <:< behaviour
