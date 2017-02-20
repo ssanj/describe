@@ -9,3 +9,7 @@ class Defaults[T: Show : Ordering](values: Seq[T])(
 
   def d2() = values.sorted.nl.print
 }
+
+class Default[T: Show](value: T)(implicit stringtToPrint: String => Print) {
+  def d1() = implicitly[Show[T]].show(value).print
+}

@@ -6,7 +6,7 @@ import scala.language.implicitConversions
 package object describe {
 
   import scala.tools.nsc.interpreter.{StdReplVals, ISettings}
-  import api.{Defaults, Format, Show, Sorted, Print}
+  import api.{Default, Defaults, Format, Show, Sorted, Print}
 
   private[describe] val newLine = System.lineSeparator
 
@@ -112,9 +112,13 @@ package object describe {
   def pkg_*[T](f: api.MemberInfo => Seq[T])(implicit ps: api.members.PackageSelect) =
     api.members.getPackageAnything[T](f)(ps)
 
+  def summarise[T: TypeTag] = api.members.summarise[T]
+
   implicit def imSeqToFormat[T: Show](values: Seq[T]): Format[T] = new Format[T](values, implicitly[Show[T]])
 
   implicit def imSeqToDefaults[T: Show : Ordering](values: Seq[T]): Defaults[T] = new Defaults[T](values)
+
+  implicit def instanceToDefaults[T: Show](value: T): Default[T] = new Default[T](value)
 
   implicit def imSeqToSorted[T](values: Seq[T]): Sorted[T] = new Sorted[T](values)
 

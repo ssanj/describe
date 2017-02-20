@@ -127,5 +127,9 @@ trait Members {
       results.filterNot(_._2.isEmpty).map(t => PackageElement[T](t._1, t._2))
     }
 
+  def summarise[T: TypeTag]: TypeSummary = {
+    new TypeSummary(MemberInfo(typeOf[T]))
+  }
+
   //TODO: Handle `package`.type to get package object contents
 }

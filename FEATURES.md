@@ -149,13 +149,16 @@ implicit def pToReg(path: p): scala.util.matching.Regex =
  32. Allow transforming on a Seq[PackageSelect[A]] with a A => B [x]
 
  33. Add a summarize method which will write out a summary of a type:
-  - superclasses
-  - constructors
-  - extractors
-  - methods
-  - vals
-  - vars
-  - subclasses
+  - superclasses [x]
+  - constructors [x]
+  - extractors [x]
+  - methods [x]
+  - vals [x]
+  - vars [x]
+  - subclasses [x]
+  - Related classes (unique classes either passed in as parameters or returned as return types)
+  - Add counts to the top of the headings:
+    eg. Methods (36):
 
 34. Add support to find typeClass instances.
   - implicits methods for the type
