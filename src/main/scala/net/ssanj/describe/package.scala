@@ -96,9 +96,9 @@ package object describe {
 
   implicit def toCp = api.members.toCp _
 
-  lazy val PackageSelect = api.members.PackageSelect
+  lazy val pkg = api.members.PackageSelect
 
-  type PackageSelect = api.members.PackageSelect
+  type pkg = api.members.PackageSelect
 
   def pkgClasses(implicit ps: api.members.PackageSelect) =
     api.members.getPackageClasses(ps)
