@@ -182,3 +182,5 @@ implicit def pToReg(path: p): scala.util.matching.Regex =
 41. Show subclasses for a type [x]
     - get superclasses for each type
     - check for <:< behaviour
+
+42. Release version once we have a stable feature-set
