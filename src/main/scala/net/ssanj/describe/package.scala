@@ -46,7 +46,7 @@ package object describe {
 
   def methods[T: TypeTag] = api.members.info[T].methods
 
-  def methodsX[T: TypeTag] = api.members.info[T].methodsX
+  def methods_+[T: TypeTag] = api.members.info[T].methodsX
 
   def methods[T: TypeTag](value: T) = api.members.info[T](value).methods
 
@@ -93,8 +93,6 @@ package object describe {
   lazy val serializableMethods = declaredOn[Serializable] ++ declaredOn[java.io.Serializable]
 
   def shortNames = api.Transform.shortNames(_)
-
-  def getPackage[T: TypeTag] = api.getPackage[T]
 
   implicit def toCp = api.members.toCp _
 

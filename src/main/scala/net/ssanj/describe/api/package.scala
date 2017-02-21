@@ -36,7 +36,7 @@ package object api extends ToSymbolOps
   private[api] def hasEmptySymbol(t: u.Type): Boolean =
     getTypeSymbol(t).orElse(getTermSymbol(t)).isDefined
 
-  def getPackage[T: u.TypeTag]: Option[MemberInfo] = for {
+  private[api] def getPackage[T: u.TypeTag]: Option[MemberInfo] = for {
     ts <- getTypeSymbol(u.typeOf[T])
     owner = ts.owner
     if (owner.isType && owner.isPackage)
