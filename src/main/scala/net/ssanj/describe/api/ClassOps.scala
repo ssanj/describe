@@ -23,7 +23,7 @@ trait ClassOps {
 
   val asReflectType: u.Type
 
-  val subclasses: Seq[ClassInfo]
+  // val subclasses: Seq[ClassInfo]
 
   val typeParams: Seq[MemberInfo]
 

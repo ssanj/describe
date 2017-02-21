@@ -163,6 +163,7 @@ implicit def pToReg(path: p): scala.util.matching.Regex =
 34. Add support to find typeClass instances.
   - implicits methods for the type
   - implicit vals for the type
+  * This should be covered by implicits
 
 35. Add pkgExtractors [x]
 
@@ -178,6 +179,6 @@ implicit def pToReg(path: p): scala.util.matching.Regex =
 
   Eg. map => map[A,B](A => B): B
 
-41. Show subclasses for a type
+41. Show subclasses for a type [x]
     - get superclasses for each type
     - check for <:< behaviour

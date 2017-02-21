@@ -110,9 +110,25 @@ trait Members {
 
   def getPackageConstructors = getPackageAnything[MethodInfo](_.constructors)
 
+  def getPackageVals = getPackageAnything[ValInfo](_.vals)
+
+  def getPackageVars = getPackageAnything[VarInfo](_.vars)
+
+  def getPackageModules = getPackageAnything[ModuleInfo](_.modules)
+
+  def getPackageAbstractClasses =
+    getPackageAnything[MemberInfo](mi => if (mi.isAbstract && !mi.isTrait) Seq(mi) else Seq.empty[MemberInfo]).andThen(_.map(_.mi))
+
+  def getPackageTraits =
+    getPackageAnything[MemberInfo](mi => if (mi.isTrait) Seq(mi) else Seq.empty[MemberInfo]).andThen(_.map(_.mi))
+
   def findPackageVals(f: ValInfo => Boolean)(ps: PackageSelect):
       Seq[PackageElement[ValInfo]] =
-        getPackageAnything[ValInfo](_.vals)(ps).filter(pe => pe.elements.exists(f))
+        getPackageAnything[ValInfo](mi => mi.vals.filter(f))(ps)
+
+  def findPackageMethods(f: MethodInfo => Boolean)(ps: PackageSelect):
+      Seq[PackageElement[MethodInfo]] =
+        getPackageAnything[MethodInfo](mi => mi.methods.filter(f))(ps)
 
   def getPackageSubclasses[T: TypeTag](ps: PackageSelect): Seq[MemberInfo] = {
     val targetType = typeOf[T].erasure

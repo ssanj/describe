@@ -24,8 +24,8 @@ trait ToClassOps {
 
     lazy val asReflectType       = cs.toType
 
-    lazy val subclasses          =
-      cs.knownDirectSubclasses.collect { case c if c.isType => ClassInfo(c.asClass) }.toSeq
+    // lazy val subclasses          =
+    //   cs.knownDirectSubclasses.collect { case c if c.isType => ClassInfo(c.asClass) }.toSeq
 
     lazy val typeParams          =
       cs.typeParams.collect { case tp if tp.isType => MemberInfo(tp.asType.toType) }

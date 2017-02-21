@@ -66,6 +66,18 @@ package object describe {
 
   def modules[T: TypeTag] = api.members.info[T].modules
 
+  def constructors[T: TypeTag] = api.members.info[T].constructors
+
+  def constructors[T: TypeTag](value: T) = api.members.info[T].constructors
+
+  def extractors[T: TypeTag] = api.members.info[T].extractors
+
+  def extractors[T: TypeTag](value: T) = api.members.info[T].extractors
+
+  def implicits[T: TypeTag] = api.members.info[T].methods.filter(_.isImplicit)
+
+  def implicits[T: TypeTag](value: T) = api.members.info[T].methods.filter(_.isImplicit)
+
   //access to the reflection universe
   lazy val ru = scala.reflect.runtime.universe
 
@@ -96,6 +108,12 @@ package object describe {
   def pkgImplicits(implicit ps: api.members.PackageSelect) =
     api.members.getPackageImplicits(ps)
 
+  def pkgVals(implicit ps: api.members.PackageSelect) =
+    api.members.getPackageVals(ps)
+
+  def pkgVars(implicit ps: api.members.PackageSelect) =
+    api.members.getPackageVars(ps)
+
   //pkgSubclasses[T](implicitly, ps)
   def pkgSubclasses[T: TypeTag](implicit ps: api.members.PackageSelect) =
     api.members.getPackageSubclasses[T](ps)
@@ -106,8 +124,20 @@ package object describe {
   def pkgConstructors(implicit ps: api.members.PackageSelect) =
     api.members.getPackageConstructors(ps)
 
+  def pkgModules(implicit ps: api.members.PackageSelect) =
+    api.members.getPackageModules(ps)
+
+  def pkgAbstractClasses(implicit ps: api.members.PackageSelect) =
+    api.members.getPackageAbstractClasses(ps)
+
+  def pkgTraits(implicit ps: api.members.PackageSelect) =
+    api.members.getPackageTraits(ps)
+
   def pkgVals_?(f: api.ValInfo => Boolean)(implicit ps: api.members.PackageSelect) =
     api.members.findPackageVals(f)(ps)
+
+  def pkgMethods_?(f: api.MethodInfo => Boolean)(implicit ps: api.members.PackageSelect) =
+    api.members.findPackageMethods(f)(ps)
 
   def pkg_*[T](f: api.MemberInfo => Seq[T])(implicit ps: api.members.PackageSelect) =
     api.members.getPackageAnything[T](f)(ps)

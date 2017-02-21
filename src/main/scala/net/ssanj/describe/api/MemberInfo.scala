@@ -15,6 +15,8 @@ object MemberInfo {
   //Going to a TypeSymbol from a Type should always be safe.
   implicit def toSymbolOpsFromMemberInfo(mi: MemberInfo): SymbolOps = toSymbolOps(mi.symbol)
 
+  implicit def toClassSymbolOpsFromMemberInfo(mi: MemberInfo): ClassOps = toClassOps(mi.symbol.asClass)
+
   implicit val memberInfoShow: Show[MemberInfo] =
     Show.create[MemberInfo]{ mi =>
       val traitFlag = mi.asClass.map(_.isTrait).getOrElse(false)
