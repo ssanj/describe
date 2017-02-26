@@ -60,12 +60,14 @@ package object describe {
 
   def vars[T: TypeTag]    = api.members.info[T].vars
 
+  //TODO: Name clashes if we go into power mode
   def vals[T: TypeTag]    = api.members.info[T].vals
 
   def classes[T: TypeTag] = api.members.info[T].classes
 
   def modules[T: TypeTag] = api.members.info[T].modules
 
+  //TODO: Name clashes if we go into power mode
   def constructors[T: TypeTag] = api.members.info[T].constructors
 
   def constructors[T: TypeTag](value: T) = api.members.info[T].constructors

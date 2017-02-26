@@ -22,7 +22,7 @@ failed       flatten   getOrElse   map         recoverWith   withFilter
 filter       foreach   isFailure   orElse      toOption
 ```
 
-You could also complete a method name with its signature if you knew at least part of its name:
+You could also complete a method name with its signature if you know at least part of its name:
 
 ```
 t.ma<tab>
@@ -34,7 +34,7 @@ yields:
 t.map
 ```
 
-and further tabbing, yields the full method signature for map:
+and further tabbing, yields the full method signature for the method:
 
 ```
 def map[U](f: Int => U): scala.util.Try[U]
@@ -55,13 +55,24 @@ we are ready to start having some fun! :)
 Using __methods__ you can easily list all the methods on any type in one go:
 
 ```
-methods[scala.util.Try[_]].d1
+methods[scala.util.Try[_]]
 ```
 
-_We use a type constructor here_ (```Try[_]```) _because the scala.util.Try type takes in a type argument. Notice how we did not need to create an instance to get this information as in the previous example. The_ ```d1``` _method is just the first default formatting which sorts the results into separate numbered lines. There is also a_ ```d2``` _that sorts the results into lines without numbering. You can also write your own custom formatting. More on that later._
+_We use a type constructor here_ (```Try[_]```) _because the scala.util.Try type takes in a type argument. Notice how we did not need to create an instance to get this information as in the previous example_.
 
+which yields a Seq of api.MethodInfo objects:
 
-The above yields:
+```
+res11: Seq[net.ssanj.describe.api.MethodInfo] = List(MethodInfo(method transform), MethodInfo(method toOption), MethodInfo(method withFilter), MethodInfo(method orElse), MethodInfo(method getOrElse), MethodInfo(constructor Try), MethodInfo(method $asInstanceOf), MethodInfo(method $isInstanceOf), MethodInfo(method synchronized), MethodInfo(method ##), MethodInfo(method !=), MethodInfo(method ==), MethodInfo(method ne), MethodInfo(method eq), MethodInfo(method notifyAll), MethodInfo(method notify), MethodInfo(method clone), MethodInfo(method getClass), MethodInfo(method hashCode), MethodInfo(method toString), MethodInfo(method equals), MethodInfo(method wait), MethodInfo(method wait), MethodInfo(method wait), MethodInfo(method finalize), MethodInfo(method asInstanceOf), MethodInfo(method ...
+```
+
+To format the result into a readable output use one of the __d__ methods:
+
+```
+res11.d1
+```
+
+which yields:
 
 ```
  1. def !=(x$1: Any): Boolean
@@ -104,6 +115,8 @@ The above yields:
 38. def withFilter(p: T => Boolean): Try.this.WithFilter
 ```
 
+The ```d1``` method is just the first default formatting which sorts the results into separate numbered lines. There is also a ```d2``` that sorts the results into lines without numbering. The general rule is that if you want to use describe as an API, you can directly manipulate api.MethodInfo. Alternatively if you just want display some results to STDOUT, use the __d__ methods or write your own formatting. More on that later.
+
 If you did have an instance of a type you could achieve the same result with:
 
 ```
@@ -113,7 +126,7 @@ methods(t).d1
 If we want list the methods of a specific subclass of a type we can directly just use that type with __methods__:
 
 ```
-scala> methods[scala.util.Success[_]]
+scala> methods[scala.util.Success[_]].d1
 
  1. def !=(x$1: Any): Boolean
  2. def ##: Int
@@ -163,6 +176,105 @@ scala> methods[scala.util.Success[_]]
 46. def wait(x$1: Long, x$2: Int): Unit
 47. def withFilter(p: T => Boolean): Try.this.WithFilter
 ```
+
+Now you might notice there are a lot of uninteresting methods like those from scala.Any, scala.AnyRef and scala.Product etc. You can filter out many of these methods, if they have not been overridden in the target type, by chaining together the following __without__ methods:
+
+1. withoutAny (without scala.Any methods)
+1. withoutAnyRef (without scala.AnyRef methods)
+1. withoutProduct (without scala.Product methods)
+1. withoutSerial (without scala.Serializable and java.io.Serialiable methods)
+
+For example to filter out methods from scala.AnyRef from ```scala.util.Success``` do:
+
+```
+methods[scala.util.Success[_]].withoutAnyRef.d1
+```
+
+which yields:
+
+```
+ 1. def $init$: Unit
+ 2. [constructor] def Success(value: T): scala.util.Success[T]
+ 3. def asInstanceOf[T0]: T0
+ 4. def canEqual(x$1: Any): Boolean
+ 5. def copy[T](value: T): scala.util.Success[T]
+ 6. def copy$default$1[T]: T @scala.annotation.unchecked.uncheckedVariance
+ 7. def equals(x$1: Any): Boolean
+ 8. def failed: scala.util.Try[Throwable]
+ 9. def filter(p: T => Boolean): scala.util.Try[T]
+10. def flatMap[U](f: T => scala.util.Try[U]): scala.util.Try[U]
+11. def flatten[U](ev: <:<[T,scala.util.Try[U]]): scala.util.Try[U]
+12. def foreach[U](f: T => U): Unit
+13. def get: T
+14. def getOrElse[U >: T](default: => U): U
+15. def hashCode: Int
+16. def isFailure: Boolean
+17. def isInstanceOf[T0]: Boolean
+18. def isSuccess: Boolean
+19. def map[U](f: T => U): scala.util.Try[U]
+20. def orElse[U >: T](default: => scala.util.Try[U]): scala.util.Try[U]
+21. def productArity: Int
+22. def productElement(x$1: Int): Any
+23. def productIterator: Iterator[Any]
+24. def productPrefix: String
+25. def recover[U >: T](rescueException: PartialFunction[Throwable,U]): scala.util.Try[U]
+26. def recoverWith[U >: T](f: PartialFunction[Throwable,scala.util.Try[U]]): scala.util.Try[U]
+27. def toOption: Option[T]
+28. def toString: String
+29. def transform[U](s: T => scala.util.Try[U], f: Throwable => scala.util.Try[U]): scala.util.Try[U]
+30. def value: T
+31. def withFilter(p: T => Boolean): Try.this.WithFilter
+```
+
+_Notice that we still get the equals and hashCode methods. This is because these methods have been overridden in the scala.util.Success case class_.
+
+TODO: Should we have a way to filter out methods irrespective of whether they have been overridden?
+
+If you only want to list the methods declared on a type, use __declaredOn__:
+
+```
+declaredOn[scala.util.Try[_]].d1
+```
+
+which yields:
+
+```
+ 1. [constructor] def Try: scala.util.Try[T]
+ 2. def failed: scala.util.Try[Throwable]
+ 3. def filter(p: T => Boolean): scala.util.Try[T]
+ 4. def flatMap[U](f: T => scala.util.Try[U]): scala.util.Try[U]
+ 5. def flatten[U](ev: <:<[T,scala.util.Try[U]]): scala.util.Try[U]
+ 6. def foreach[U](f: T => U): Unit
+ 7. def get: T
+ 8. def getOrElse[U >: T](default: => U): U
+ 9. def isFailure: Boolean
+10. def isSuccess: Boolean
+11. def map[U](f: T => U): scala.util.Try[U]
+12. def orElse[U >: T](default: => scala.util.Try[U]): scala.util.Try[U]
+13. def recover[U >: T](f: PartialFunction[Throwable,U]): scala.util.Try[U]
+14. def recoverWith[U >: T](f: PartialFunction[Throwable,scala.util.Try[U]]): scala.util.Try[U]
+15. def toOption: Option[T]
+16. def transform[U](s: T => scala.util.Try[U], f: Throwable => scala.util.Try[U]): scala.util.Try[U]
+17. def withFilter(p: T => Boolean): Try.this.WithFilter
+```
+
+What if you wanted to see only the implicit methods defined within a type? You could use the __implicits__ method:
+
+```
+implicits[scala.Option.type].d1
+```
+
+which yields:
+
+```
+ 1. implicit def option2Iterable[A](xo: Option[A]): Iterable[A]
+```
+
+_We use Option.type here to specify the class for the Option object (ModuleClass)._
+
+### Members ###
+
+TODO
 
 ## Repl ##
 
