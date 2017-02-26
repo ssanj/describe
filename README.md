@@ -272,6 +272,14 @@ which yields:
 
 _We use Option.type here to specify the class for the Option object (ModuleClass)._
 
+TODO: methods_+
+TODO: constructors
+TODO: vals
+TODO: vars
+TODO: extractors
+TODO: classes
+TODO: modules
+
 ### Members ###
 
 TODO
