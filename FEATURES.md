@@ -184,3 +184,12 @@ implicit def pToReg(path: p): scala.util.matching.Regex =
     - check for <:< behaviour
 
 42. Release version once we have a stable feature-set
+
+43. Remove dupes for methods_x
+
+44. Add method equality check for the following:
+    - name
+    - type params
+    - params (name and type)
+    - return type
+    - visibility (???)
