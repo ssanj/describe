@@ -135,6 +135,8 @@ s: scala.util.Try[Int] = Success(1)
 methods(s).d1
 ```
 
+#### Without ####
+
 Now you might notice there are a lot of uninteresting methods like those from scala.Any, scala.AnyRef and scala.Product etc. You can filter out many of these methods, if they have not been overridden in the target type, by chaining together the following __without__ methods:
 
 1. withoutAny (without scala.Any methods)
@@ -188,6 +190,8 @@ _Notice that we still get the equals and hashCode methods. This is because these
 
 TODO: Should we have a way to filter out methods irrespective of whether they have been overridden?
 
+#### Declared ####
+
 If you only want to list the methods declared on a type, use __declaredOn__:
 
 ```
@@ -221,6 +225,8 @@ which yields:
 22. def toString: String
 23. def value: T
 ```
+
+#### Implicits ####
 
 What if you wanted to see only the implicit methods defined within a type? You could use the __implicits__ method:
 
@@ -296,6 +302,8 @@ which yields:
 ```
 
 _We use Predef.type here to specify the class for the Predef object (ModuleClass)._
+
+#### With Implicit Conversions ####
 
 Sometimes you want not only the methods defined on a type but also methods made accessibly through implicit conversions on the types companion object. If we use __methods__ on Option:
 
@@ -552,6 +560,8 @@ which yields:
 182. def zip[A1 >: A, B, That](that: scala.collection.GenIterable[B])(bf: scala.collection.generic.CanBuildFrom[Repr,(A1, B),That]): That
 ```
 
+#### Constructors ####
+
 To list the constructors on an object use __constructors__:
 
 ```
@@ -566,6 +576,23 @@ which yields:
 3. [constructor] def apply(length: Long, unit: scala.concurrent.duration.TimeUnit): scala.concurrent.duration.FiniteDuration
 4. [constructor] def apply(length: Double, unit: scala.concurrent.duration.TimeUnit): scala.concurrent.duration.Duration
  ```
+
+#### Extractors ####
+
+To list extractors defined within a type use __extractors__:
+
+```
+extractors[scala.concurrent.duration.Duration.type].d1
+```
+
+which yields:
+
+```
+1. [extractor] def unapply(d: scala.concurrent.duration.Duration): Option[(Long, scala.concurrent.duration.TimeUnit)]
+2. [extractor] def unapply(s: String): Option[(Long, scala.concurrent.duration.TimeUnit)]
+```
+
+### Vals ###
 
 To list the vals defined in any type use __vals__:
 
@@ -586,6 +613,8 @@ which yields:
  8. val singleton_=:=: =:=[Any,Any]
 ```
 
+### Vars ###
+
 Similarly to list vars in any type use __vars__:
 
 ```
@@ -600,18 +629,7 @@ which yields:
 3. var written: Channel.this.LinkedList[A]
 ```
 
-To list extractors defined within a type use __extractors__:
-
-```
-extractors[scala.concurrent.duration.Duration.type].d1
-```
-
-which yields:
-
-```
-1. [extractor] def unapply(d: scala.concurrent.duration.Duration): Option[(Long, scala.concurrent.duration.TimeUnit)]
-2. [extractor] def unapply(s: String): Option[(Long, scala.concurrent.duration.TimeUnit)]
-```
+### Classes ###
 
 To list classes defined within a type use __classes__:
 
@@ -624,6 +642,8 @@ which yields:
 ```
  1. class Option.this.WithFilter
 ```
+
+### Modules ###
 
 To list objects (modules) within a type use __modules__:
 
