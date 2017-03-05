@@ -685,7 +685,7 @@ members[type].methods
 
 In addition there are a number of filtration methods at your disposal.
 
-##### Filtering Methods By Name ####
+##### Filtering Methods By Name #####
 
 To filter methods on a type by name use:
 
@@ -708,7 +708,7 @@ which yields:
 2. def flatten[B](ev: <:<[A,Option[B]]): Option[B]
 ```
 
-##### Filtering Methods By Parameter Type ####
+##### Filtering Methods By Parameter Type #####
 
 To filter methods that take a parameter of a specific type use:
 
@@ -758,7 +758,7 @@ which yields:
 31. def wait(x$1: Long, x$2: Int): Unit
 ```
 
-#### Filtering Methods by Return Type ####
+##### Filtering Methods by Return Type #####
 
 To filter methods on a type by return type of the method use:
 
@@ -812,7 +812,7 @@ which yields:
  4. def synchronized[T0](x$1: T0): T0
 ```
 
-#### Filtering Higher-Order Methods ####
+##### Filtering Higher-Order Methods #####
 
 To find higher-order methods (methods that accept functions as parameters and/or return functions as results) use:
 
