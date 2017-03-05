@@ -660,7 +660,185 @@ which yields:
 
 ### Members ###
 
-TODO
+Using __members__ on a type gives you a starting point to many types of information available from that type. This information is encapsulated in an api.MemberInfo class. The types of information provided all of the types listed above and a few extras:
+
+1. Methods
+1. Constructors
+1. Extractors
+1. Vals
+1. Vars
+1. Classes
+1. Modules
+1. Implicits
+1. Companion Objects
+1. Superclasses
+1. Subclasses
+1. Flags
+
+#### Methods ####
+
+The __methods__ method described above is a simple alias around the methods returned from __members__:
+
+```
+members[type].methods
+```
+
+In addition there are a number of filtration methods at your disposal.
+
+##### Filtering Methods By Name ####
+
+To filter methods on a type by name use:
+
+```
+members[type].methodsByName(regular_expression)
+```
+
+For example to find methods that begin with "flat" on an
+ Option, use:
+
+
+```
+members[Option[_]].methodsByName("flat.*").d1
+```
+
+which yields:
+
+```
+1. def flatMap[B](f: A => Option[B]): Option[B]
+2. def flatten[B](ev: <:<[A,Option[B]]): Option[B]
+```
+
+##### Filtering Methods By Parameter Type ####
+
+To filter methods that take a parameter of a specific type use:
+
+```
+members[type].methodsByParam[paramType]
+```
+
+For example to find methods that take a Int as a parameter on a List use:
+
+```
+members[List[_]].methodsByParam[Int].d1
+```
+
+which yields:
+
+```
+ 1. def apply(n: Int): A
+ 2. def combinations(n: Int): Iterator[Repr]
+ 3. def copyToArray[B >: A](xs: Array[B], start: Int, len: Int): Unit
+ 4. def copyToArray[B >: A](xs: Array[B], start: Int): Unit
+ 5. def drop(n: Int): List[A]
+ 6. def dropRight(n: Int): Repr
+ 7. def grouped(size: Int): Iterator[Repr]
+ 8. def indexOf[B >: A](elem: B, from: Int): Int
+ 9. def indexOfSlice[B >: A](that: scala.collection.GenSeq[B], from: Int): Int
+10. def indexWhere(p: A => Boolean, from: Int): Int
+11. def isDefinedAt(x: Int): Boolean
+12. def lastIndexOf[B >: A](elem: B, end: Int): Int
+13. def lastIndexOfSlice[B >: A](that: scala.collection.GenSeq[B], end: Int): Int
+14. def lastIndexWhere(p: A => Boolean, end: Int): Int
+15. def lengthCompare(len: Int): Int
+16. def padTo[B >: A, That](len: Int, elem: B)(bf: scala.collection.generic.CanBuildFrom[Repr,B,That]): That
+17. def patch[B >: A, That](from: Int, patch: scala.collection.GenSeq[B], replaced: Int)(bf: scala.collection.generic.CanBuildFrom[Repr,B,That]): That
+18. def productElement(n: Int): Any
+19. def segmentLength(p: A => Boolean, from: Int): Int
+20. def slice(from: Int, until: Int): List[A]
+21. def sliceWithKnownBound(from: Int, until: Int): Repr
+22. def sliceWithKnownDelta(from: Int, until: Int, delta: Int): Repr
+23. def sliding(size: Int, step: Int): Iterator[Repr]
+24. def sliding(size: Int): Iterator[Repr]
+25. def splitAt(n: Int): (List[A], List[A])
+26. def startsWith[B](that: scala.collection.GenSeq[B], offset: Int): Boolean
+27. def take(n: Int): List[A]
+28. def takeRight(n: Int): List[A]
+29. def updated[B >: A, That](index: Int, elem: B)(bf: scala.collection.generic.CanBuildFrom[Repr,B,That]): That
+30. def view(from: Int, until: Int): scala.collection.SeqView[A,Repr]
+31. def wait(x$1: Long, x$2: Int): Unit
+```
+
+#### Filtering Methods by Return Type ####
+
+To filter methods on a type by return type of the method use:
+
+```
+members[type].methodsReturning
+```
+
+For example to find all the methods that return a Boolean from an Option use:
+
+```
+members[Option[_]].methodsReturning[Boolean].d1
+```
+
+which yields:
+
+```
+ 1. def !=(x$1: Any): Boolean
+ 2. def $isInstanceOf[T0]: Boolean
+ 3. def ==(x$1: Any): Boolean
+ 4. def canEqual(that: Any): Boolean
+ 5. def contains[A1 >: A](elem: A1): Boolean
+ 6. def eq(x$1: AnyRef): Boolean
+ 7. def equals(x$1: Any): Boolean
+ 8. def exists(p: A => Boolean): Boolean
+ 9. def forall(p: A => Boolean): Boolean
+10. def isDefined: Boolean
+11. def isEmpty: Boolean
+12. def isInstanceOf[T0]: Boolean
+13. def ne(x$1: AnyRef): Boolean
+14. def nonEmpty: Boolean
+```
+
+To find methods that return type parameters use:
+
+```
+members[type].methodsReturningTypeParams
+```
+
+For example to list methods that return type parameters on a Future type use:
+
+```
+ members[scala.concurrent.Future[_]].methodsReturningTypeParams.d1
+```
+
+which yields:
+
+```
+ 1. def $asInstanceOf[T0]: T0
+ 2. def asInstanceOf[T0]: T0
+ 3. def result(atMost: scala.concurrent.duration.Duration)(permit: scala.concurrent.CanAwait): T
+ 4. def synchronized[T0](x$1: T0): T0
+```
+
+#### Filtering Higher-Order Methods ####
+
+To find higher-order methods (methods that accept functions as parameters and/or return functions as results) use:
+
+```
+members[type].methodsOfHigherOrder
+```
+
+For example to list the higher-order methods on Option use:
+
+```
+members[Option[_]].methodsOfHigherOrder.d1
+```
+
+which yields:
+
+```
+1. def exists(p: A => Boolean): Boolean
+2. def filter(p: A => Boolean): Option[A]
+3. def filterNot(p: A => Boolean): Option[A]
+4. def flatMap[B](f: A => Option[B]): Option[B]
+5. def fold[B](ifEmpty: => B)(f: A => B): B
+6. def forall(p: A => Boolean): Boolean
+7. def foreach[U](f: A => U): Unit
+8. def map[B](f: A => B): Option[B]
+9. def withFilter(p: A => Boolean): Option.this.WithFilter
+```
 
 ## Repl ##
 

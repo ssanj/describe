@@ -193,3 +193,14 @@ implicit def pToReg(path: p): scala.util.matching.Regex =
     - params (name and type)
     - return type
     - visibility (???)
+
+45. methodsByParam2 also returns matches for a single type match:
+
+  members[List[_]].methodsByParam2[Int, Int] =>
+    1. def apply(n: Int): A
+    2. def sliceWithKnownBound(from: Int, until: Int): Repr
+
+46. methodsByParam2 does not work with Functionx types. How do we match against:
+  def indexWhere(p: A => Boolean, from: Int): Int
+
+47 methodsReturningX should use <:< instead of =:=
