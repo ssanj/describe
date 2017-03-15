@@ -763,7 +763,7 @@ which yields:
 To filter methods on a type by return type of the method use:
 
 ```
-members[type].methodsReturning
+members[type].methodsReturning[returnType]
 ```
 
 For example to find all the methods that return a Boolean from an Option use:
@@ -789,6 +789,59 @@ which yields:
 12. def isInstanceOf[T0]: Boolean
 13. def ne(x$1: AnyRef): Boolean
 14. def nonEmpty: Boolean
+```
+
+To find methods that return a type or a subclass of that type use:
+
+```
+members[type].methodsReturningX[returnType]
+```
+
+For example to find all methods that return ru.Symbol or its subclasses use:
+
+```
+members[ru.ClassSymbol].methodsReturningX[ru.Symbol].d1
+```
+
+which yields methods returning Symbol, ClassSymbol, MethodSymbol, ModuleSymbol, TermSymbol and TypeSymbol:
+
+```
+ 1. def asClass: Symbols.this.ClassSymbol
+ 2. def asMethod: Symbols.this.MethodSymbol
+ 3. def asModule: Symbols.this.ModuleSymbol
+ 4. def asTerm: Symbols.this.TermSymbol
+ 5. def asType: Symbols.this.TypeSymbol
+ 6. def companion: Symbols.this.Symbol
+ 7. [deprecated] def companionSymbol: Symbols.this.Symbol
+ 8. def filter(cond: Symbols.this.Symbol => Boolean): Symbols.this.Symbol
+ 9. def map(f: Symbols.this.Symbol => Symbols.this.Symbol): Symbols.this.Symbol
+10. def module: Symbols.this.Symbol
+11. def orElse(alt: => Symbols.this.Symbol): Symbols.this.Symbol
+12. def owner: Symbols.this.Symbol
+13. def primaryConstructor: Symbols.this.Symbol
+14. def privateWithin: Symbols.this.Symbol
+15. def suchThat(cond: Symbols.this.Symbol => Boolean): Symbols.this.Symbol
+```
+
+In contrast:
+
+```
+members[ru.ClassSymbol].methodsReturning[ru.Symbol].d1
+```
+
+only returns methods returning Symbol:
+
+```
+ 1. def companion: Symbols.this.Symbol
+ 2. [deprecated] def companionSymbol: Symbols.this.Symbol
+ 3. def filter(cond: Symbols.this.Symbol => Boolean): Symbols.this.Symbol
+ 4. def map(f: Symbols.this.Symbol => Symbols.this.Symbol): Symbols.this.Symbol
+ 5. def module: Symbols.this.Symbol
+ 6. def orElse(alt: => Symbols.this.Symbol): Symbols.this.Symbol
+ 7. def owner: Symbols.this.Symbol
+ 8. def primaryConstructor: Symbols.this.Symbol
+ 9. def privateWithin: Symbols.this.Symbol
+10. def suchThat(cond: Symbols.this.Symbol => Boolean): Symbols.this.Symbol
 ```
 
 To find methods that return type parameters use:
@@ -838,6 +891,14 @@ which yields:
 7. def foreach[U](f: A => U): Unit
 8. def map[B](f: A => B): Option[B]
 9. def withFilter(p: A => Boolean): Option.this.WithFilter
+```
+
+#### Filtering by MethodInfo ####
+
+If you want completely control how you filter a members methods, use __methodsBy__:
+
+```
+
 ```
 
 ## Repl ##

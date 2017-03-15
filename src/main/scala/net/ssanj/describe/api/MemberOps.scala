@@ -52,7 +52,7 @@ trait MemberOps {
 
   def methodsReturning[T: TypeTag]: Seq[MethodInfo] = methods.filter(_.returnType.finalResultType.erasure =:= typeOf[T].erasure)
 
-  def methodsReturningX[T: TypeTag]: Seq[MethodInfo] = methods.filter(_.returnType.finalResultType.erasure =:= typeOf[T].erasure)
+  def methodsReturningX[T: TypeTag]: Seq[MethodInfo] = methods.filter(_.returnType.finalResultType.erasure <:< typeOf[T].erasure)
 
   def methodsReturningTypeParams: Seq[MethodInfo] =
     methods.filter(_.returnType.finalResultType.typeSymbol.isParameter)

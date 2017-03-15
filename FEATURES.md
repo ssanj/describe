@@ -203,4 +203,4 @@ implicit def pToReg(path: p): scala.util.matching.Regex =
 46. methodsByParam2 does not work with Functionx types. How do we match against:
   def indexWhere(p: A => Boolean, from: Int): Int
 
-47 methodsReturningX should use <:< instead of =:=
+47 methodsReturningX should use <:< instead of =:= [x]
