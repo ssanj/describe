@@ -898,7 +898,423 @@ which yields:
 If you want completely control how you filter a members methods, use __methodsBy__:
 
 ```
+TODO
+```
 
+### Package ###
+
+Describe has some powerful ways to query across a package. Current support features are:
+
+  1. Listing classes
+  1. Listing Implicits
+  1. Listing Vals
+  1. Listing Vars
+  1. Listing Subclasses
+  1. Listing Extractors
+  1. Listing Constructors
+  1. Listing Modules
+  1. Listing Abstract classes
+  1. Listing Traits
+  1. Search by Vals
+  1. Search by Methods
+  1. Search by Anything
+
+To get started with using package features, we first need to move into power mode in the repl:
+
+```
+:power
+```
+
+which will then welcome you with:
+
+```
+** Power User mode enabled - BEEP WHIR GYVE **
+** :phase has been set to 'typer'.          **
+** scala.tools.nsc._ has been imported      **
+** global._, definitions._ also imported    **
+** Try  :help, :vals, power.<tab>           **
+```
+
+Before you can work with a package you need to create a package selection for the package(s) you want.
+
+To do that you can use the __pkg__ method:
+
+```
+pkg(classPath, regular_expression_to_match_package)
+```
+
+For example to create a package selection for all subpackages under _scala.concurrent_ use:
+
+
+```
+val psScalaConcurrent = pkg(classPath, "scala\\.concurrent\\.")
+```
+
+Armed with a package selection we can now start querying across a package.
+
+#### Listing Classes in a Package ####
+
+To list classes in a package use the __pkgClasses__ method:
+
+
+```
+pkgClasses(packageSelector)
+```
+
+For example to list all classes in _scala.concurrent_ use:
+
+```
+pkgClasses(psScalaConcurrent).d1
+```
+
+which yields:
+
+```
+ 1. scala.concurrent.Await [class]
+ 2. scala.concurrent.Await [object]
+ 3. scala.concurrent.AwaitPermission [class]
+ 4. scala.concurrent.AwaitPermission [object]
+ 5. scala.concurrent.Awaitable [trait]
+ 6. scala.concurrent.BatchingExecutor [trait]
+ 7. scala.concurrent.BatchingExecutor$Batch [class]
+ 8. scala.concurrent.BlockContext [object]
+ 9. scala.concurrent.BlockContext [trait]
+10. scala.concurrent.BlockContext.DefaultBlockContext [object]
+11. scala.concurrent.CanAwait [trait]
+12. scala.concurrent.Channel [class]
+13. scala.concurrent.Channel$LinkedList [class]
+14. scala.concurrent.DelayedLazyVal [class]
+15. scala.concurrent.ExecutionContext [object]
+16. scala.concurrent.ExecutionContext [trait]
+17. scala.concurrent.ExecutionContext.Implicits [object]
+18. scala.concurrent.ExecutionContextExecutor [trait]
+19. scala.concurrent.ExecutionContextExecutorService [trait]
+20. scala.concurrent.Future [object]
+21. scala.concurrent.Future [trait]
+22. scala.concurrent.Future.InternalCallbackExecutor [object]
+23. scala.concurrent.FutureTaskRunner [trait]
+24. scala.concurrent.JavaConversions [class]
+25. scala.concurrent.JavaConversions [object]
+26. scala.concurrent.Lock [class]
+27. scala.concurrent.ManagedBlocker [trait]
+28. scala.concurrent.OnCompleteRunnable [trait]
+29. scala.concurrent.Promise [object]
+30. scala.concurrent.Promise [trait]
+31. scala.concurrent.SyncChannel [class]
+32. scala.concurrent.SyncVar [class]
+33. scala.concurrent.TaskRunner [trait]
+34. scala.concurrent.ThreadPoolRunner [trait]
+35. scala.concurrent.ThreadPoolRunner$RunCallable [class]
+36. scala.concurrent.duration.Deadline [class]
+37. scala.concurrent.duration.Deadline [object]
+38. scala.concurrent.duration.Deadline.DeadlineIsOrdered [object]
+39. scala.concurrent.duration.DoubleMult [object]
+40. scala.concurrent.duration.Duration [abstract] [class]
+41. scala.concurrent.duration.Duration [object]
+42. scala.concurrent.duration.Duration$Infinite [abstract] [class]
+43. scala.concurrent.duration.Duration.DurationIsOrdered [object]
+44. scala.concurrent.duration.DurationConversions [object]
+45. scala.concurrent.duration.DurationConversions [trait]
+46. scala.concurrent.duration.DurationConversions$Classifier [trait]
+47. scala.concurrent.duration.DurationConversions.fromNowConvert [object]
+48. scala.concurrent.duration.DurationConversions.spanConvert [object]
+49. scala.concurrent.duration.DurationDouble [object]
+50. scala.concurrent.duration.DurationInt [object]
+51. scala.concurrent.duration.DurationLong [object]
+52. scala.concurrent.duration.FiniteDuration [class]
+53. scala.concurrent.duration.FiniteDuration [object]
+54. scala.concurrent.duration.FiniteDuration.FiniteDurationIsOrdered [object]
+55. scala.concurrent.duration.IntMult [object]
+56. scala.concurrent.duration.LongMult [object]
+57. scala.concurrent.duration.fromNow [object]
+58. scala.concurrent.duration.package [object]
+59. scala.concurrent.duration.package [object]
+60. scala.concurrent.duration.package$DoubleMult [class]
+61. scala.concurrent.duration.package$DurationDouble [class]
+62. scala.concurrent.duration.package$DurationInt [class]
+63. scala.concurrent.duration.package$DurationLong [class]
+64. scala.concurrent.duration.package$IntMult [class]
+65. scala.concurrent.duration.package$LongMult [class]
+66. scala.concurrent.duration.span [object]
+67. scala.concurrent.forkjoin.CountedCompleter [abstract] [class]
+68. scala.concurrent.forkjoin.ForkJoinPool [class]
+69. scala.concurrent.forkjoin.ForkJoinPool$DefaultForkJoinWorkerThreadFactory [class]
+70. scala.concurrent.forkjoin.ForkJoinPool$EmptyTask [class]
+71. scala.concurrent.forkjoin.ForkJoinPool$ForkJoinWorkerThreadFactory [trait]
+72. scala.concurrent.forkjoin.ForkJoinPool$ManagedBlocker [trait]
+73. scala.concurrent.forkjoin.ForkJoinPool$Submitter [class]
+74. scala.concurrent.forkjoin.ForkJoinPool$WorkQueue [class]
+75. scala.concurrent.forkjoin.ForkJoinTask [abstract] [class]
+76. scala.concurrent.forkjoin.ForkJoinTask$AdaptedCallable [class]
+77. scala.concurrent.forkjoin.ForkJoinTask$AdaptedRunnable [class]
+78. scala.concurrent.forkjoin.ForkJoinTask$AdaptedRunnableAction [class]
+79. scala.concurrent.forkjoin.ForkJoinTask$ExceptionNode [class]
+80. scala.concurrent.forkjoin.ForkJoinWorkerThread [class]
+81. scala.concurrent.forkjoin.LinkedTransferQueue [class]
+82. scala.concurrent.forkjoin.LinkedTransferQueue$Itr [class]
+83. scala.concurrent.forkjoin.LinkedTransferQueue$Node [class]
+84. scala.concurrent.forkjoin.RecursiveAction [abstract] [class]
+85. scala.concurrent.forkjoin.RecursiveTask [abstract] [class]
+86. scala.concurrent.forkjoin.ThreadLocalRandom [class]
+87. scala.concurrent.forkjoin.ThreadLocalRandom$1 [class]
+88. scala.concurrent.forkjoin.TransferQueue [trait]
+89. scala.concurrent.forkjoin.package-info [trait]
+90. scala.concurrent.impl.AbstractPromise [abstract] [class]
+91. scala.concurrent.impl.CallbackRunnable [class]
+92. scala.concurrent.impl.ExecutionContextImpl [class]
+93. scala.concurrent.impl.ExecutionContextImpl [object]
+94. scala.concurrent.impl.ExecutionContextImpl$AdaptedForkJoinTask [class]
+95. scala.concurrent.impl.ExecutionContextImpl$DefaultThreadFactory [class]
+96. scala.concurrent.impl.Future [class]
+97. scala.concurrent.impl.Future [object]
+98. scala.concurrent.impl.Future$PromiseCompletingRunnable [class]
+99. scala.concurrent.impl.Promise [object]
+100. scala.concurrent.impl.Promise [trait]
+101. scala.concurrent.impl.Promise$CompletionLatch [class]
+102. scala.concurrent.impl.Promise$DefaultPromise [class]
+103. scala.concurrent.impl.Promise$KeptPromise [class]
+104. scala.concurrent.package [object]
+105. scala.concurrent.package [object]
+106. scala.concurrent.util.Unsafe [class]
+```
+
+#### Listing Implicits in a Package ####
+
+To list implicit conversions in a package use the __pkgImplicits__ method:
+
+
+```
+pkgImplicits(packageSelector)
+```
+
+For example to list all implicits in _scala.concurrent_ use:
+
+```
+pkgImplicits(psScalaConcurrent).d1
+```
+
+which yields:
+
+```
+ 1. scala.concurrent.ExecutionContext.Implicits [object]:
+    implicit def global: scala.concurrent.ExecutionContextExecutor
+ 2. scala.concurrent.FutureTaskRunner [trait]:
+    implicit def futureAsFunction[S](x: FutureTaskRunner.this.Future[S]): () => S
+    implicit def functionAsTask[S](fun: () => S): TaskRunner.this.Task[S]
+ 3. scala.concurrent.JavaConversions [object]:
+    implicit def asExecutionContext(exec: java.util.concurrent.Executor): scala.concurrent.ExecutionContextExecutor
+    implicit def asExecutionContext(exec: java.util.concurrent.ExecutorService): scala.concurrent.ExecutionContextExecutorService
+ 4. scala.concurrent.Promise [trait]:
+    implicit def internalExecutor: scala.concurrent.ExecutionContext
+ 5. scala.concurrent.TaskRunner [trait]:
+    implicit def functionAsTask[S](fun: () => S): TaskRunner.this.Task[S]
+ 6. scala.concurrent.ThreadPoolRunner [trait]:
+    implicit def futureAsFunction[S](x: ThreadPoolRunner.this.Future[S]): () => S
+    implicit def functionAsTask[S](fun: () => S): ThreadPoolRunner.this.Task[S]
+ 7. scala.concurrent.duration.Deadline.DeadlineIsOrdered [object]:
+    implicit def mkOrderingOps(lhs: T): Ordering.this.Ops
+ 8. scala.concurrent.duration.Duration.DurationIsOrdered [object]:
+    implicit def mkOrderingOps(lhs: T): Ordering.this.Ops
+ 9. scala.concurrent.duration.FiniteDuration.FiniteDurationIsOrdered [object]:
+    implicit def mkOrderingOps(lhs: T): Ordering.this.Ops
+10. scala.concurrent.duration.package [object]:
+    implicit def DoubleMult(f: Double): scala.concurrent.duration.package.DoubleMult
+    implicit def LongMult(i: Long): scala.concurrent.duration.package.LongMult
+    implicit def IntMult(i: Int): scala.concurrent.duration.package.IntMult
+    implicit def DurationDouble(d: Double): scala.concurrent.duration.package.DurationDouble
+    implicit def DurationLong(n: Long): scala.concurrent.duration.package.DurationLong
+    implicit def DurationInt(n: Int): scala.concurrent.duration.package.DurationInt
+    implicit def durationToPair(d: scala.concurrent.duration.Duration): (Long, scala.concurrent.duration.package.TimeUnit)
+    implicit def pairLongToDuration(p: (Long, scala.concurrent.duration.package.TimeUnit)): scala.concurrent.duration.FiniteDuration
+    implicit def pairIntToDuration(p: (Int, scala.concurrent.duration.package.TimeUnit)): scala.concurrent.duration.Duration
+```
+
+
+#### Listing Modules in a Package ####
+
+To list modules in a package use the __pkgModules__ method:
+
+
+```
+pkgModules(packageSelector)
+```
+
+For example to list all modules in _scala.concurrent_ use:
+
+```
+pkgModules(psScalaConcurrent).d1
+```
+
+which yields:
+
+```
+ 1. scala.concurrent.BlockContext [object]:
+    scala.concurrent.BlockContext.DefaultBlockContext.type
+ 2. scala.concurrent.ExecutionContext [object]:
+    scala.concurrent.ExecutionContext.Implicits.type
+ 3. scala.concurrent.Future [object]:
+    scala.concurrent.Future.InternalCallbackExecutor.type
+ 4. scala.concurrent.duration.Deadline [object]:
+    implicit scala.concurrent.duration.Deadline.DeadlineIsOrdered.type
+ 5. scala.concurrent.duration.Duration [object]:
+    implicit scala.concurrent.duration.Duration.DurationIsOrdered.type
+ 6. scala.concurrent.duration.DurationConversions [object]:
+    implicit scala.concurrent.duration.DurationConversions.fromNowConvert.type
+    implicit scala.concurrent.duration.DurationConversions.spanConvert.type
+ 7. scala.concurrent.duration.FiniteDuration [object]:
+    implicit scala.concurrent.duration.FiniteDuration.FiniteDurationIsOrdered.type
+ 8. scala.concurrent.duration.package [object]:
+    scala.concurrent.duration.package.DurationInt.type
+    scala.concurrent.duration.package.DurationLong.type
+    scala.concurrent.duration.package.DurationDouble.type
+    scala.concurrent.duration.package.IntMult.type
+    scala.concurrent.duration.package.LongMult.type
+    scala.concurrent.duration.package.DoubleMult.type
+    scala.concurrent.duration.package.fromNow.type
+    scala.concurrent.duration.package.span.type
+ 9. scala.concurrent.forkjoin.LinkedTransferQueue [class]:
+    LinkedTransferQueue.this.$Itr.type
+10. scala.concurrent.impl.Promise$CompletionLatch [class]:
+    AbstractQueuedSynchronizer.this.$ConditionObject.type
+```
+
+#### Searching across Methods in a Package ####
+
+To search across methods in a package use the __pkgMethods_?__ method:
+
+```
+pkgMethods_?(MethodInfo => Boolean)(packageSelector)
+```
+
+For example to list all methods in _scala.concurrent_ that start with "onSuccess" use:
+
+```
+pkgMethods_?(_.name.startsWith("onSuccess"))(psScalaConcurrent)
+```
+
+which yields:
+
+```
+ 1. scala.concurrent.Future [trait]:
+    def onSuccess[U](pf: PartialFunction[T,U])(executor: scala.concurrent.ExecutionContext): Unit
+ 2. scala.concurrent.impl.Promise [trait]:
+    def onSuccess[U](pf: PartialFunction[T,U])(executor: scala.concurrent.ExecutionContext): Unit
+ 3. scala.concurrent.impl.Promise$DefaultPromise [class]:
+    def onSuccess[U](x$1: PartialFunction[T,U], x$2: scala.concurrent.ExecutionContext): Unit
+    def onSuccess[U](pf: PartialFunction[T,U])(executor: scala.concurrent.ExecutionContext): Unit
+ 4. scala.concurrent.impl.Promise$KeptPromise [class]:
+    def onSuccess[U](x$1: PartialFunction[T,U], x$2: scala.concurrent.ExecutionContext): Unit
+    def onSuccess[U](pf: PartialFunction[T,U])(executor: scala.concurrent.ExecutionContext): Unit
+```
+
+
+#### Searching across Member in a Package ####
+
+To search across member in a package use the __pkg_*__ method:
+
+```
+pkg_*[T](MethodInfo => Seq[T])(packageSelector)
+```
+
+For example to list all the higher order methods in _scala.concurrent_ use:
+
+```
+pkg_*(_.methodsOfHigherOrder)(psScalaConcurrent).d1
+```
+
+which yields:
+
+```
+ 1. scala.concurrent.BatchingExecutor$Batch [class]:
+    def blockOn[T](x$1: () => T, x$2: scala.concurrent.CanAwait): T
+ 2. scala.concurrent.DelayedLazyVal [class]:
+    [constructor] def DelayedLazyVal(f: () => T, body: => Unit)(exec: scala.concurrent.ExecutionContext): scala.concurrent.DelayedLazyVal[T]
+ 3. scala.concurrent.ExecutionContext [object]:
+    def defaultReporter: Throwable => Unit
+    def fromExecutor(e: java.util.concurrent.Executor, reporter: Throwable => Unit): scala.concurrent.ExecutionContextExecutor
+    def fromExecutorService(e: java.util.concurrent.ExecutorService, reporter: Throwable => Unit): scala.concurrent.ExecutionContextExecutorService
+ 4. scala.concurrent.Future [object]:
+    def traverse[A, B, M <: TraversableOnce[X]](in: M[A])(fn: A => scala.concurrent.Future[B])(cbf: scala.collection.generic.CanBuildFrom[M[A],B,M[B]], executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[M[B]]
+    def reduce[T, R >: T](futures: TraversableOnce[scala.concurrent.Future[T]])(op: (R, T) => R)(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[R]
+    def fold[T, R](futures: TraversableOnce[scala.concurrent.Future[T]])(zero: R)(op: (R, T) => R)(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[R]
+    def find[T](futures: TraversableOnce[scala.concurrent.Future[T]])(p: T => Boolean)(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[Option[T]]
+ 5. scala.concurrent.Future [trait]:
+    def withFilter(p: T => Boolean)(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[T]
+    def filter(p: T => Boolean)(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[T]
+    def flatMap[S](f: T => scala.concurrent.Future[S])(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[S]
+    def map[S](f: T => S)(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[S]
+    def transform[S](s: T => S, f: Throwable => Throwable)(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[S]
+    def foreach[U](f: T => U)(executor: scala.concurrent.ExecutionContext): Unit
+    def onComplete[U](f: scala.util.Try[T] => U)(executor: scala.concurrent.ExecutionContext): Unit
+ 6. scala.concurrent.FutureTaskRunner [trait]:
+    implicit def futureAsFunction[S](x: FutureTaskRunner.this.Future[S]): () => S
+    implicit def functionAsTask[S](fun: () => S): TaskRunner.this.Task[S]
+ 7. scala.concurrent.TaskRunner [trait]:
+    implicit def functionAsTask[S](fun: () => S): TaskRunner.this.Task[S]
+ 8. scala.concurrent.ThreadPoolRunner [trait]:
+    implicit def futureAsFunction[S](x: ThreadPoolRunner.this.Future[S]): () => S
+    implicit def functionAsTask[S](fun: () => S): ThreadPoolRunner.this.Task[S]
+ 9. scala.concurrent.ThreadPoolRunner$RunCallable [class]:
+    [constructor] def RunCallable(x$1: scala.concurrent.ThreadPoolRunner, x$2: () => S): ThreadPoolRunner.this.RunCallable
+10. scala.concurrent.duration.Deadline.DeadlineIsOrdered [object]:
+    def on[U](f: U => T): scala.math.Ordering[U]
+11. scala.concurrent.duration.Duration.DurationIsOrdered [object]:
+    def on[U](f: U => T): scala.math.Ordering[U]
+12. scala.concurrent.duration.FiniteDuration.FiniteDurationIsOrdered [object]:
+    def on[U](f: U => T): scala.math.Ordering[U]
+13. scala.concurrent.impl.CallbackRunnable [class]:
+    [constructor] def CallbackRunnable(executor: scala.concurrent.ExecutionContext, onComplete: scala.util.Try[T] => Any): scala.concurrent.impl.CallbackRunnable[T]
+    def onComplete: scala.util.Try[T] => Any
+14. scala.concurrent.impl.ExecutionContextImpl [class]:
+    [constructor] def ExecutionContextImpl(es: java.util.concurrent.Executor, reporter: Throwable => Unit): scala.concurrent.impl.ExecutionContextImpl
+15. scala.concurrent.impl.ExecutionContextImpl [object]:
+    def fromExecutorService$default$2: Throwable => Unit @scala.annotation.unchecked.uncheckedVariance
+    def fromExecutor$default$2: Throwable => Unit @scala.annotation.unchecked.uncheckedVariance
+    def fromExecutorService(es: java.util.concurrent.ExecutorService, reporter: Throwable => Unit): scala.concurrent.impl.ExecutionContextImpl with scala.concurrent.ExecutionContextExecutorService
+    def fromExecutor(e: java.util.concurrent.Executor, reporter: Throwable => Unit): scala.concurrent.impl.ExecutionContextImpl
+16. scala.concurrent.impl.Future$PromiseCompletingRunnable [class]:
+    [constructor] def PromiseCompletingRunnable(x$1: () => T): scala.concurrent.impl.Future.PromiseCompletingRunnable
+17. scala.concurrent.impl.Promise [trait]:
+    def withFilter(p: T => Boolean)(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[T]
+    def filter(p: T => Boolean)(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[T]
+    def flatMap[S](f: T => scala.concurrent.Future[S])(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[S]
+    def map[S](f: T => S)(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[S]
+    def transform[S](s: T => S, f: Throwable => Throwable)(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[S]
+    def foreach[U](f: T => U)(executor: scala.concurrent.ExecutionContext): Unit
+    def onComplete[U](f: scala.util.Try[T] => U)(executor: scala.concurrent.ExecutionContext): Unit
+18. scala.concurrent.impl.Promise$CompletionLatch [class]:
+    def andThen[A](x$1: scala.runtime.BoxedUnit => A): scala.util.Try[T] => A
+    def compose[A](x$1: A => scala.util.Try[T]): A => scala.runtime.BoxedUnit
+19. scala.concurrent.impl.Promise$DefaultPromise [class]:
+    def onComplete[U](x$1: scala.util.Try[T] => U, x$2: scala.concurrent.ExecutionContext): Unit
+    def transform[S](x$1: T => S, x$2: java.lang.Throwable => java.lang.Throwable, x$3: scala.concurrent.ExecutionContext): scala.concurrent.Future[S]
+    def withFilter(x$1: T => java.lang.Object, x$2: scala.concurrent.ExecutionContext): scala.concurrent.Future[T]
+    def flatMap[S](x$1: T => scala.concurrent.Future[S], x$2: scala.concurrent.ExecutionContext): scala.concurrent.Future[S]
+    def foreach[U](x$1: T => U, x$2: scala.concurrent.ExecutionContext): Unit
+    def map[S](x$1: T => S, x$2: scala.concurrent.ExecutionContext): scala.concurrent.Future[S]
+    def filter(x$1: T => java.lang.Object, x$2: scala.concurrent.ExecutionContext): scala.concurrent.Future[T]
+    def withFilter(p: T => Boolean)(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[T]
+    def filter(p: T => Boolean)(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[T]
+    def flatMap[S](f: T => scala.concurrent.Future[S])(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[S]
+    def map[S](f: T => S)(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[S]
+    def transform[S](s: T => S, f: Throwable => Throwable)(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[S]
+    def foreach[U](f: T => U)(executor: scala.concurrent.ExecutionContext): Unit
+    def onComplete[U](f: scala.util.Try[T] => U)(executor: scala.concurrent.ExecutionContext): Unit
+20. scala.concurrent.impl.Promise$KeptPromise [class]:
+    def onComplete[U](x$1: scala.util.Try[T] => U, x$2: scala.concurrent.ExecutionContext): Unit
+    def transform[S](x$1: T => S, x$2: java.lang.Throwable => java.lang.Throwable, x$3: scala.concurrent.ExecutionContext): scala.concurrent.Future[S]
+    def withFilter(x$1: T => java.lang.Object, x$2: scala.concurrent.ExecutionContext): scala.concurrent.Future[T]
+    def flatMap[S](x$1: T => scala.concurrent.Future[S], x$2: scala.concurrent.ExecutionContext): scala.concurrent.Future[S]
+    def foreach[U](x$1: T => U, x$2: scala.concurrent.ExecutionContext): Unit
+    def map[S](x$1: T => S, x$2: scala.concurrent.ExecutionContext): scala.concurrent.Future[S]
+    def filter(x$1: T => java.lang.Object, x$2: scala.concurrent.ExecutionContext): scala.concurrent.Future[T]
+    def withFilter(p: T => Boolean)(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[T]
+    def filter(p: T => Boolean)(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[T]
+    def flatMap[S](f: T => scala.concurrent.Future[S])(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[S]
+    def map[S](f: T => S)(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[S]
+    def transform[S](s: T => S, f: Throwable => Throwable)(executor: scala.concurrent.ExecutionContext): scala.concurrent.Future[S]
+    def foreach[U](f: T => U)(executor: scala.concurrent.ExecutionContext): Unit
+    def onComplete[U](f: scala.util.Try[T] => U)(executor: scala.concurrent.ExecutionContext): Unit
 ```
 
 ## Repl ##
