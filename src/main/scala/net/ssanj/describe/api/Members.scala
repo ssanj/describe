@@ -9,14 +9,7 @@ trait Members {
 
   def info[T: TypeTag](value: T): MemberInfo = MemberInfo(typeOf[T])
 
-
-  import scala.tools.nsc.util.ClassFileLookup
-  import scala.tools.nsc.io.AbstractFile
   import java.io.File
-
-  def toCp(powerClassPath: ClassFileLookup[AbstractFile]): Seq[File] = {
-    powerClassPath.asURLs.map{ m => new File(m.getFile) }
-  }
 
   case class PackageSelect(classpath: Seq[File], packageFilter: scala.util.matching.Regex,
     verbose: Boolean)
