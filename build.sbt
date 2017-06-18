@@ -14,17 +14,17 @@ libraryDependencies ++= Seq(
 )
 
 scalacOptions ++= Seq(
-                      // "-unchecked",
-                      // "-deprecation",
-                      // "-feature",
-                      // "-Xfatal-warnings",
-                      // "-Xlint:_",
-                      // "-Ywarn-dead-code",
-                      // "-Ywarn-inaccessible",
-                      // "-Ywarn-unused-import",
-                      // "-Ywarn-infer-any",
-                      // "-Ywarn-nullary-override",
-                      // "-Ywarn-nullary-unit",
+                      "-unchecked",
+                      "-deprecation",
+                      "-feature",
+                      "-Xfatal-warnings",
+                      "-Xlint:_",
+                      "-Ywarn-dead-code",
+                      "-Ywarn-inaccessible",
+                      "-Ywarn-unused-import",
+                      "-Ywarn-infer-any",
+                      "-Ywarn-nullary-override",
+                      "-Ywarn-nullary-unit",
                       "-language:implicitConversions",
                       "-language:higherKinds"
                      )

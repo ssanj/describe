@@ -24,12 +24,12 @@ trait Members {
 
       import java.util.jar.JarFile
       import java.util.jar.JarEntry
-      import scala.collection.JavaConversions._
+      import scala.collection.JavaConverters._
 
       def getClassesFromJarFile(file: File): Seq[MemberInfo] = {
         val jarFile = new JarFile(file)
         //TODO: Should we Try this?
-        val entries: Iterator[JarEntry] = jarFile.entries
+        val entries: Iterator[JarEntry] = jarFile.entries.asScala
         val names = entries.collect {
           case e if e.getName.endsWith(".class") =>
             e.getName.replace("/", ".").replace(".class", "")
