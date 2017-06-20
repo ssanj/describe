@@ -2,6 +2,8 @@
 
 A Scala reflection utility to quickly list details of a type.
 
+ [ ![Download](https://api.bintray.com/packages/ssanj/maven/describe/images/download.svg) ](https://bintray.com/ssanj/maven/describe/_latestVersion)
+
 ## Discovery ##
 
 If you're like me, you use the Scala repl to discover an API. It might also have something to do with not wanting to use an IDE ;)
