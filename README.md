@@ -2,7 +2,7 @@
 
 A Scala reflection utility to quickly list details of a type.
 
- [ ![Download](https://api.bintray.com/packages/ssanj/maven/describe/images/download.svg) ](https://bintray.com/ssanj/maven/describe/_latestVersion)
+ [![Build Status](https://travis-ci.org/ssanj/describe.svg?branch=master)](https://travis-ci.org/ssanj/describe) [ ![Download](https://api.bintray.com/packages/ssanj/maven/describe/images/download.svg) ](https://bintray.com/ssanj/maven/describe/_latestVersion)
 
 ## Discovery ##
 
