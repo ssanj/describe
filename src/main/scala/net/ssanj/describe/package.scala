@@ -3,7 +3,7 @@ package net.ssanj
 import scala.reflect.runtime.universe.TypeTag
 import scala.language.implicitConversions
 
-package object describe {
+package object describe extends ClasspathLoader {
 
   import scala.tools.nsc.interpreter.{StdReplVals, ISettings}
   import api.{Default, Defaults, Format, Show, Sorted, Print}
@@ -95,8 +95,6 @@ package object describe {
   lazy val serializableMethods = declaredOn[Serializable] ++ declaredOn[java.io.Serializable]
 
   def shortNames = api.Transform.shortNames(_)
-
-  implicit def toCp = api.members.toCp _
 
   lazy val pkg = api.members.PackageSelect
 

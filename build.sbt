@@ -7,8 +7,8 @@ version := "0.0.1-SNAPSHOT"
 scalaVersion := "2.11.8"
 
 libraryDependencies ++= Seq(
-  "org.scala-lang" %  "scala-reflect"  % "2.11.8",
-  "org.scala-lang" %  "scala-compiler" % "2.11.8",
+  "org.scala-lang" %  "scala-reflect"  % scalaVersion.value,
+  "org.scala-lang" %  "scala-compiler" % scalaVersion.value,
   "org.scalatest"  %% "scalatest"      % "3.0.0"  % "test",
   "org.scalacheck" %% "scalacheck"     % "1.13.4" % "test"
 )
@@ -36,4 +36,6 @@ scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
 scalacOptions in (Compile,doc) ++= Seq("-no-link-warnings")
 
 initialCommands in (Compile, console) := "import net.ssanj.describe._"
+
+crossScalaVersions := Seq("2.11.8", "2.12.2")
 
