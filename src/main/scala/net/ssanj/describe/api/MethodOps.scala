@@ -10,7 +10,7 @@ trait MethodOps {
   // val paramList: List[Universe.Symbol]
   val returnType: MemberInfo
   // val typeParams: List[Universe.Symbol]
-  val isMethod: Boolean
+  // val isMethod: Boolean
 
   val isParameterless: Boolean
 

@@ -15,7 +15,7 @@ trait ToMethodOps {
 
     lazy val returnType: MemberInfo = MemberInfo(methodSymbol.returnType)
 
-    lazy val isMethod: Boolean = methodSymbol.isMethod
+    // lazy val isMethod: Boolean = methodSymbol.isMethod
 
     lazy val isParameterless: Boolean = methodSymbol.paramLists.flatten.isEmpty
 
