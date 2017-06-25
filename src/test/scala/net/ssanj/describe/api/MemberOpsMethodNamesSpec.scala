@@ -8,7 +8,6 @@ final class MemberOpsMethodNamesSpec extends Matchers with WordSpecLike with App
   "MemberOps" should {
     "find public methods" when {
       "a class has public methods" in {
-        val ani         = new Animal
         val mi          = MemberInfo(u.typeOf[Animal])
         val methods     = mi.methods
         val methodNames = methods.map(_.name)
