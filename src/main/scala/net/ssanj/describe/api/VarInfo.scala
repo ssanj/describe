@@ -15,6 +15,8 @@ final case class VarInfo(private val ts: u.TermSymbol) {
 object VarInfo {
   implicit def toSymbolOpsFromVarInfo(vi: VarInfo) = toSymbolOps(vi.ts)
 
+  implicit def toTermOpsFromVarInfo(vi: VarInfo) = toTermOps(vi.ts)
+
   implicit val varInfoShow: Show[VarInfo] = Show.create[VarInfo](vi => s"var ${vi.name}: ${vi.rType.toString}")
 
   implicit val varOrderig: Ordering[VarInfo] = createOrdering[VarInfo]
